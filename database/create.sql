@@ -45,7 +45,7 @@ CREATE TABLE feature (
 CREATE TABLE image (
     id serial  NOT NULL,
     listing_id int  NOT NULL,
-    data bytea  NOT NULL,
+    data bytea  NULL,
     CONSTRAINT image_pk PRIMARY KEY (id)
 );
 
