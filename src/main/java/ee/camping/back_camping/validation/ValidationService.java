@@ -14,4 +14,10 @@ public class ValidationService {
             throw new BusinessException(UNVALIDATED_CREDENTIALS.getMessage(), UNVALIDATED_CREDENTIALS.getErrorCode());
         }
     }
+
+    public static void validateUsernameIsAvailable(boolean userExists) {
+        if (userExists) {
+            throw new BusinessException(Error.USERNAME_UNAVAILABLE.getMessage(), Error.USERNAME_UNAVAILABLE.getErrorCode());
+        }
+    }
 }

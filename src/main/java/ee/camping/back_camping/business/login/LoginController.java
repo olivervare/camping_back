@@ -1,6 +1,6 @@
 package ee.camping.back_camping.business.login;
 
-import ee.camping.back_camping.domain.user.LoginResponseDto;
+import ee.camping.back_camping.business.dto.LoginResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +16,8 @@ public class LoginController {
     @Operation(summary = "Tagastab userId ja roleName'i.",
             description = """
                     Süsteemist otsitakse username ja passwordi abil kasutajat, kelle konto on aktiivne. 
-                    Kui vastust ei leita, visatakse viga errorCode'ga 111.""")
+                    Kui vastust ei leita, antakse viga errorCode'ga 111.""")
     public LoginResponseDto login(@RequestParam String username, @RequestParam String password) {
-        LoginResponseDto loginResponseDto = loginService.login(username, password);
-        return loginResponseDto;
+        return loginService.login(username, password);
     }
 }

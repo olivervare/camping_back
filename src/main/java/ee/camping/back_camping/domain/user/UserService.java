@@ -18,4 +18,13 @@ public class UserService {
         ValidationService.validateUserCredentials(userOptional);
         return userOptional.get();
     }
+
+    public void validateIfUsernameIsAvailable(String username) {
+        boolean userExists = userRepository.userExistsBy(username);
+        ValidationService.validateUsernameIsAvailable(userExists);
+    }
+
+    public void addUser(User user) {
+        userRepository.save(user);
+    }
 }
