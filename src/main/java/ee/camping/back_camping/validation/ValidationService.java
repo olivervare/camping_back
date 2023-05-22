@@ -15,7 +15,7 @@ public class ValidationService {
         }
     }
 
-    public static void validateUsernameIsAvailable(boolean userExists) {
+    public static void validateUsernameAvailability(boolean userExists) {
         if (userExists) {
             throw new BusinessException(Error.USERNAME_UNAVAILABLE.getMessage(), Error.USERNAME_UNAVAILABLE.getErrorCode());
         }

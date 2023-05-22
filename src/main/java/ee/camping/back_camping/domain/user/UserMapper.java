@@ -2,7 +2,7 @@ package ee.camping.back_camping.domain.user;
 
 import ee.camping.back_camping.business.Status;
 import ee.camping.back_camping.business.dto.LoginResponseDto;
-import ee.camping.back_camping.business.users.NewUsersDto;
+import ee.camping.back_camping.business.users.NewUserDto;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, imports = {Status.class})
@@ -13,5 +13,5 @@ public interface UserMapper {
     LoginResponseDto toLoginResponseDto(User user);
 
     @Mapping(expression = "java(Status.ACTIVE.getLetter())", target = "status")
-    User toUser(NewUsersDto newUsersDto);
+    User toUser(NewUserDto newUserDto);
 }

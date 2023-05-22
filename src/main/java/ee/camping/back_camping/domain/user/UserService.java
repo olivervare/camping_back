@@ -21,10 +21,18 @@ public class UserService {
 
     public void validateIfUsernameIsAvailable(String username) {
         boolean userExists = userRepository.userExistsBy(username);
-        ValidationService.validateUsernameIsAvailable(userExists);
+        ValidationService.validateUsernameAvailability(userExists);
     }
 
     public void addUser(User user) {
         userRepository.save(user);
+    }
+
+    public User findUserBy(Integer userId) {
+        return userRepository.findById(userId).get();
+    }
+
+    public void deleteUserBy(Integer userId) {
+        userRepository.deleteById(userId);
     }
 }

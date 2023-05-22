@@ -11,7 +11,7 @@ import java.io.Serializable;
  * A DTO for the {@link User} entity
  */
 @Data
-public class NewUsersDto implements Serializable {
+public class NewUserDto implements Serializable {
     @Size(max = 255)
     @NotNull
     private String username;
