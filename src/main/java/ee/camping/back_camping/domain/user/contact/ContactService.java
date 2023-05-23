@@ -9,7 +9,15 @@ public class ContactService {
     @Resource
     private ContactRepository contactRepository;
 
-    public void addUserContact(Contact contact) {
+    public void addContact(Contact contact) {
         contactRepository.save(contact);
+    }
+
+    public Contact getContactBy(Integer contactId) {
+        return contactRepository.getContactBy(contactId);
+    }
+
+    public Contact getUserContactBy(Integer userId) {
+        return contactRepository.getUserContactBy(userId);
     }
 }

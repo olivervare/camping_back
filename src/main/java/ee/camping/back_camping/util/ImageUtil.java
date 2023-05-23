@@ -7,9 +7,9 @@ public class ImageUtil {
         byte[] bytes = imageData.getBytes(StandardCharsets.UTF_8);
         return bytes;
     }
-//    public static String byteArrayToBase64ImageData(byte[] data) {
-//        String imageData = new String(data, StandardCharsets.UTF_8);
-//        return imageData;
-//    }
+    public static String byteArrayToBase64ImageData(byte[] data) {
+        String imageData = new String(data, StandardCharsets.UTF_8);
+        return imageData;
+    }
 
 }

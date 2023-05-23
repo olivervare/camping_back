@@ -24,15 +24,28 @@ public class UsersController {
     public LoginResponseDto addUser(@RequestBody NewUserDto newUserDto) {
         return usersService.addUser(newUserDto);
     }
+
     @PostMapping("/signup-info")
     @Operation(summary = "Loob username'i ja passwordi juurde kontaktandmed")
-    public void addUserContact(@RequestBody ContactDto contactDto) {
-        usersService.addUserContact(contactDto);
+    public void addContact(@RequestBody ContactDto contactDto) {
+        usersService.addContact(contactDto);
     }
 
-    @DeleteMapping("/signup")
+    @DeleteMapping("/signup-info")
     @Operation(summary = "Poolelioleva kasutaja kustutamine", description = "Kasutaja kustutamine userId kaudu")
     public void deleteUser(@RequestParam Integer userId) {
         usersService.deleteUser(userId);
+    }
+
+    @GetMapping("/my-profile")
+    @Operation(summary = "Tagastab kasutaja andmed kontakt-tabelist")
+    public ContactDto getContact(@RequestParam Integer userId) {
+        return usersService.getContact(userId);
+    }
+
+    @PutMapping("/account/my-profile")
+    @Operation(summary = "Muudab kasutaja andmeid", description = "Kasutaja saab muuta oma nime, emaili, telnumbrit ja pilti")
+    public void editContact(@RequestParam Integer contactId, @RequestBody ContactDto contactDto) {
+        usersService.editContact(contactId, contactDto);
     }
 }

@@ -39,14 +39,30 @@ public class UsersService {
     }
 
     @Transactional
-    public void addUserContact(ContactDto contactDto) {
+    public void addContact(ContactDto contactDto) {
         Contact contact = contactMapper.toContact(contactDto);
         User user = userService.findUserBy(contactDto.getUserId());
         contact.setUser(user);
-        contactService.addUserContact(contact);
+        contactService.addContact(contact);
     }
 
     public void deleteUser(Integer userId) {
         userService.deleteUserBy(userId);
     }
+
+    public void editContact(Integer contactId, ContactDto contactDto) {
+        Contact contact = contactService.getContactBy(contactId);
+        contactMapper.partialUpdate(contactDto, contact);
+        userService.findUserBy(contactDto.getUserId());
+
+        contactService.addContact(contact);
+
+
+    }
+
+    public ContactDto getContact(Integer userId) {
+        Contact contact = contactService.getUserContactBy(userId);
+        return contactMapper.toContactDto(contact);
+    }
 }
+
