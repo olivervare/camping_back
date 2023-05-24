@@ -2,7 +2,7 @@ package ee.camping.back_camping.domain.listing;
 
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class ListingService {
@@ -12,7 +12,7 @@ public class ListingService {
         this.listingRepository = listingRepository;
     }
 
-    public Optional<Listing> findMyListingPreview(Integer userId) {
-        return listingRepository.findListingBy(userId);
+    public List<Listing> findMyListings(Integer userId) {
+        return listingRepository.findListingsBy(userId);
     }
 }
