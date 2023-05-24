@@ -11,8 +11,10 @@ public class ReviewService {
     @Resource
     private ReviewRepository reviewRepository;
 
-
-    public List<Review> findListingReviewsBy(Integer id) {
-        return reviewRepository.findListingReviewsBy(id);
+    public List<Review> findReviewsBy(Integer listingId) {
+        return reviewRepository.findReviewsBy(listingId);
+    }
+    public ScoreInfo findReviewInfo(Integer listingId) {
+        return reviewRepository.findReviewInfo(listingId);
     }
 }

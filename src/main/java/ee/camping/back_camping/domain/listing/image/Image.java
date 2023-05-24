@@ -1,6 +1,6 @@
-package ee.camping.back_camping.domain.listing;
+package ee.camping.back_camping.domain.listing.image;
 
-import ee.camping.back_camping.domain.listing.feature.Feature;
+import ee.camping.back_camping.domain.listing.Listing;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "listing_feature")
-public class ListingFeature {
+@Table(name = "image")
+public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -22,12 +22,7 @@ public class ListingFeature {
     private Listing listing;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "feature_id", nullable = false)
-    private Feature feature;
-
-    @NotNull
-    @Column(name = "is_selected", nullable = false)
-    private Boolean isSelected = false;
+    @Column(name = "data", nullable = false)
+    private byte[] data;
 
 }

@@ -1,5 +1,6 @@
-package ee.camping.back_camping.domain.listing;
+package ee.camping.back_camping.domain.listing.image;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ImageDto implements Serializable {
-    private Integer id;
+    @NotNull
     private String imageData;
 }

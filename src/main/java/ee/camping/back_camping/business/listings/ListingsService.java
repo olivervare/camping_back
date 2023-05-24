@@ -1,10 +1,12 @@
 package ee.camping.back_camping.business.listings;
 
 import ee.camping.back_camping.domain.listing.*;
-import ee.camping.back_camping.domain.review.RatingDto;
-import ee.camping.back_camping.domain.review.Review;
-import ee.camping.back_camping.domain.review.ReviewMapper;
+import ee.camping.back_camping.domain.listing.image.Image;
+import ee.camping.back_camping.domain.listing.image.ImageMapper;
+import ee.camping.back_camping.domain.listing.image.ImageService;
 import ee.camping.back_camping.domain.review.ReviewService;
+import ee.camping.back_camping.domain.review.ScoreInfo;
+import ee.camping.back_camping.util.ImageUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -23,49 +25,29 @@ public class ListingsService {
     private ListingMapper listingMapper;
     @Resource
     private ImageMapper imageMapper;
-    @Resource
-    private ReviewMapper reviewMapper;
+
 
     public List<ListingPreviewDto> findMyListingsPreview(Integer userId) {
         List<Listing> myListings = listingService.findMyListings(userId);
-        List<ListingPreviewDto> listingPreviewsDto = listingMapper.toListingPreviewsDto(myListings);
-        addListingImages(listingPreviewsDto);
-        addListingReviews(listingPreviewsDto);
-
-        return listingPreviewsDto;
+        List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(myListings);
+        addListingImages(listingPreviewDtos);
+        addRatings(listingPreviewDtos);
+        return listingPreviewDtos;
     }
 
-    private void addListingImages(List<ListingPreviewDto> listingPreviewsDto) {
-        for (ListingPreviewDto listingPreviewDto : listingPreviewsDto) {
-            List<Image> listingImages = getListingImages(listingPreviewDto.getId());
-            List<ImageDto> imagesDto = mapToImages(listingImages);
-            listingPreviewDto.setImagesDto(imagesDto);
-
-
-        }
-    }
-    private void addListingReviews(List<ListingPreviewDto> listingPreviewsDto) {
-        for (ListingPreviewDto listingPreviewDto : listingPreviewsDto) {
-            List<Review> listingReviews = findListingReview(listingPreviewDto.getId());
-            List<RatingDto> ratingsDto = mapToRatings(listingReviews);
-            listingPreviewDto.setRatingsDto(ratingsDto);
-
+    private void addListingImages(List<ListingPreviewDto> listingPreviewDtos) {
+        for (ListingPreviewDto listingPreviewDto : listingPreviewDtos) {
+            Image coverImage = imageService.findCoverImagesBy(listingPreviewDto.getListingId());
+            String imageData = ImageUtil.byteArrayToBase64ImageData(coverImage.getData());
+            listingPreviewDto.setImageData(imageData);
         }
     }
 
-    private List<Image> getListingImages(Integer id) {
-        return imageService.getListingImagesBy(id);
-    }
-
-    private List<ImageDto> mapToImages(List<Image> listingImages) {
-        return imageMapper.toImagesDto(listingImages);
-    }
-
-    private List<Review> findListingReview(Integer id) {
-        return reviewService.findListingReviewsBy(id);
-    }
-
-    private List<RatingDto> mapToRatings(List<Review> listingReviews) {
-        return reviewMapper.toRatingsDto(listingReviews);
+    private void addRatings(List<ListingPreviewDto> listingPreviewDtos) {
+        for (ListingPreviewDto listingPreviewDto : listingPreviewDtos) {
+            ScoreInfo scoreInfo = reviewService.findReviewInfo(listingPreviewDto.getListingId());
+            listingPreviewDto.setNumberOfScores(scoreInfo.getNumberOfScores());
+            listingPreviewDto.setAverageScore(scoreInfo.getAverageScore());
+        }
     }
 }

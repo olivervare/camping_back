@@ -1,6 +1,5 @@
 package ee.camping.back_camping.business.listings;
 
-import ee.camping.back_camping.domain.listing.ListingPreviewDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;

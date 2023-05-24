@@ -1,4 +1,4 @@
-package ee.camping.back_camping.domain.listing;
+package ee.camping.back_camping.domain.listing.image;
 
 import ee.camping.back_camping.util.ImageUtil;
 import org.mapstruct.*;
@@ -8,13 +8,13 @@ import java.util.List;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ImageMapper {
 
-    @Mapping(source = "data", target = "imageData", qualifiedByName = "dataToImageData")
+    @Mapping(source = "data", target = "imageData", qualifiedByName = "imageToImageData")
     ImageDto toImageDto(Image image);
 
     List<ImageDto> toImagesDto(List<Image> listingImages);
 
-    @Named("dataToImageData")
-    static String dataToImageData(byte[] data) {
+    @Named("imageToImageData")
+    static String imageToImageData(byte[] data) {
         if (data == null) {
             return "";
         }

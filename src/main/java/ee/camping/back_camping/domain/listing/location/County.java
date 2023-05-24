@@ -1,26 +1,24 @@
-package ee.camping.back_camping.domain.listing;
+package ee.camping.back_camping.domain.listing.location;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "image")
-public class Image {
+@Table(name = "county")
+public class County {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @Size(max = 255)
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "listing_id", nullable = false)
-    private Listing listing;
-
-    @Column(name = "data")
-    private byte[] data;
+    @Column(name = "name", nullable = false)
+    private String name;
 
 }
