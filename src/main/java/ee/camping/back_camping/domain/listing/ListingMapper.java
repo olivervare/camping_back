@@ -9,6 +9,6 @@ public interface ListingMapper {
 //    @Mapping(source = "ownerUserId", target = "ownerUser.id")
 //    Listing toEntity(ListingDto listingDto);
 
-    List<ListingPreviewDto> toListingPreviewDto(List<Listing> myListings);
+    List<ListingPreviewDto> toListingPreviewsDto(List<Listing> myListings);
 
 }

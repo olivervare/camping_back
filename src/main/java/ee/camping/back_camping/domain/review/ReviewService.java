@@ -11,7 +11,8 @@ public class ReviewService {
     @Resource
     private ReviewRepository reviewRepository;
 
-    public List<Review> getListingRating(Integer userId) {
-        return reviewRepository.findListingReviewsBy(userId);
+
+    public List<Review> findListingReviewsBy(Integer id) {
+        return reviewRepository.findListingReviewsBy(id);
     }
 }

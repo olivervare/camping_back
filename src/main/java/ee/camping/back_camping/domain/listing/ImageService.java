@@ -11,7 +11,8 @@ public class ImageService {
     @Resource
     private ImageRepository imageRepository;
 
-    public List<Image> findListingImages(Integer userId) {
-        return imageRepository.findListingImagesByUser(userId);
+
+    public List<Image> getListingImagesBy(Integer id) {
+        return imageRepository.getListingImagesBy(id);
     }
 }

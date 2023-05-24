@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ImageRepository extends JpaRepository<Image, Integer> {
-    @Query("select i from Image i where i.listing.ownerUser.id = ?1")
-    List<Image> findListingImagesByUser(Integer id);
+    @Query("select i from Image i where i.listing.id = ?1")
+    List<Image> getListingImagesBy(Integer id);
+
 
 }

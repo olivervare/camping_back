@@ -13,7 +13,7 @@ public interface ContactMapper {
     @Mapping(source = "image", target = "imageData", qualifiedByName = "imageToImageData")
     ContactDto toContactDto(Contact contact);
 
-    @Mapping(ignore = true, target = "image")
+    @Mapping(source = "imageData", target = "image", qualifiedByName = "imageDataToImage")
     Contact partialUpdate(ContactDto contactDto, @MappingTarget Contact contact);
 
     @Named("imageDataToImage")
