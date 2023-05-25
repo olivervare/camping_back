@@ -15,4 +15,8 @@ public class ListingService {
     public List<Listing> findMyListings(Integer userId) {
         return listingRepository.findListingsBy(userId);
     }
+
+    public List<Listing> findAllListings(Integer listingId) {
+        return listingRepository.findAllListingsBy(listingId);
+    }
 }

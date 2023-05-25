@@ -17,6 +17,12 @@ public class ListingsController {
     @Operation(summary = "Tagastab userId järgi kasutaja telkimisplatsi nime, pildi ja reitingu")
     public List<ListingPreviewDto> findMyListingsPreview(@RequestParam Integer userId) {
         return listingsService.findMyListingsPreview(userId);
+    }
 
+    @GetMapping("/all-listings")
+    @Operation(summary = "Tagastab listingId järgi kõikide telkimisplatside andmed",
+            description = "Kuvab listingu kõik pildid, nime (listing name), ja reitingu (average score)")
+    public List<AllListingsDto> findAllListings(@RequestParam Integer listingId) {
+        return listingsService.findAllListings(listingId);
     }
 }

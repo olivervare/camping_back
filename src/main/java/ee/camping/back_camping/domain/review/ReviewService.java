@@ -14,7 +14,7 @@ public class ReviewService {
     public List<Review> findReviewsBy(Integer listingId) {
         return reviewRepository.findReviewsBy(listingId);
     }
-    public ScoreInfo findReviewInfo(Integer listingId) {
-        return reviewRepository.findReviewInfo(listingId);
+    public ScoreInfo findScoreInfo(Integer listingId) {
+        return reviewRepository.findScoreInfo(listingId);
     }
 }
