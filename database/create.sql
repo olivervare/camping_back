@@ -44,7 +44,7 @@ CREATE TABLE feature (
 -- Table: image
 CREATE TABLE image (
     id serial  NOT NULL,
-    listing_id int  NOT NULL,
+    listing_id int  NULL,
     data bytea  NULL,
     CONSTRAINT image_pk PRIMARY KEY (id)
 );

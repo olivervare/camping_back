@@ -16,7 +16,12 @@ public class ListingService {
         return listingRepository.findListingsBy(userId);
     }
 
-    public List<Listing> findAllListings(Integer listingId) {
-        return listingRepository.findAllListingsBy(listingId);
+    public Listing getListing(Integer listingId) {
+        return listingRepository.getListingBy(listingId);
     }
+
+    public List<Listing> findAllActiveListings(String status) {
+        return listingRepository.findAllActiveListings(status);
+    }
+
 }

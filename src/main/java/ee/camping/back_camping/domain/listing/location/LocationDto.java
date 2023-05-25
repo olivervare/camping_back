@@ -16,12 +16,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LocationDto implements Serializable {
-    private Integer countyId;
+    private Integer locationId;
     @Size(max = 255)
     @NotNull
-    private String address;
+    private String locationAddress;
     @NotNull
-    private BigDecimal longitude;
+    private BigDecimal locationLongitude;
     @NotNull
-    private BigDecimal latitude;
+    private BigDecimal locationLatitude;
 }

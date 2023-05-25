@@ -1,5 +1,6 @@
 package ee.camping.back_camping.business.listings;
 
+import ee.camping.back_camping.business.Status;
 import ee.camping.back_camping.domain.listing.*;
 import ee.camping.back_camping.domain.listing.image.Image;
 import ee.camping.back_camping.domain.listing.image.ImageMapper;
@@ -11,8 +12,8 @@ import ee.camping.back_camping.util.ImageUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ListingsService {
@@ -33,6 +34,8 @@ public class ListingsService {
     private ImageMapper imageMapper;
     @Resource
     private LocationMapper locationMapper;
+    @Resource
+    private CountyMapper countyMapper;
 
 
     public List<ListingPreviewDto> findMyListingsPreview(Integer userId) {
@@ -43,15 +46,36 @@ public class ListingsService {
         return listingPreviewDtos;
     }
 
-    public List<AllListingsDto> findAllListings(Integer listingId) {
-        List<Listing> allListings = listingService.findAllListings(listingId);
-        List<AllListingsDto> allListingsDtos = listingMapper.toAllListingsDtos(allListings);
-        addImagesForAllListings(allListingsDtos);
-        addRatingsForAllListings(allListingsDtos);
-        addCountyForAllListings(allListingsDtos);
-        addLocationForAllListings(allListingsDtos);
+    public List<ListingPreviewDto> findAllActiveListingsPreview() {
+        List<Listing> allActiveListings = listingService.findAllActiveListings(Status.ACTIVE.getLetter());
+        List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(allActiveListings);
+        addListingImages(listingPreviewDtos);
+        addRatings(listingPreviewDtos);
+        return listingPreviewDtos;
+    }
 
-        return allListingsDtos;
+    public FullListingDto findListing(Integer listingId) {
+        Listing listing = listingService.getListing(listingId);
+        FullListingDto fullListingDto = listingMapper.toAllListingsDto(listing);
+        setImageDatas(listingId, fullListingDto);
+        setScoreinfo(listingId, fullListingDto);
+
+        return fullListingDto;
+    }
+
+    private void setImageDatas(Integer listingId, FullListingDto fullListingDto) {
+        List<Image> images = imageService.findListingImages(listingId);
+        List<String> imageDatas = new ArrayList<>();
+        for (Image image : images) {
+            String imageData = ImageUtil.byteArrayToBase64ImageData(image.getData());
+            imageDatas.add(imageData);
+        }
+        fullListingDto.setImageDatas(imageDatas);
+    }
+    private void setScoreinfo(Integer listingId, FullListingDto fullListingDto) {
+        ScoreInfo scoreInfo = reviewService.findScoreInfo(listingId);
+        fullListingDto.setNumberOfScores(scoreInfo.getNumberOfScores());
+        fullListingDto.setAverageScore(scoreInfo.getAverageScore());
     }
 
     private void addListingImages(List<ListingPreviewDto> listingPreviewDtos) {
@@ -66,38 +90,11 @@ public class ListingsService {
         for (ListingPreviewDto listingPreviewDto : listingPreviewDtos) {
             ScoreInfo scoreInfo = reviewService.findScoreInfo(listingPreviewDto.getListingId());
             listingPreviewDto.setNumberOfScores(scoreInfo.getNumberOfScores());
-            listingPreviewDto.setAverageScore(Math.round(scoreInfo.getAverageScore() * 10.0) / 10.0);
-        }
-    }
-
-    private void addImagesForAllListings(List<AllListingsDto> allListingsDtos) {
-        for (AllListingsDto allListingsDto : allListingsDtos) {
-            Image coverImage = imageService.findCoverImagesBy(allListingsDto.getListingId());
-            String imageData = ImageUtil.byteArrayToBase64ImageData(coverImage.getData());
-            allListingsDto.setImageData(imageData);
-        }
-    }
-
-    private void addRatingsForAllListings(List<AllListingsDto> allListingsDtos) {
-        for (AllListingsDto allListingsDto : allListingsDtos) {
-            ScoreInfo scoreInfo = reviewService.findScoreInfo(allListingsDto.getListingId());
-            allListingsDto.setNumberOfScores(scoreInfo.getNumberOfScores());
-            allListingsDto.setAverageScore(Math.round(scoreInfo.getAverageScore() * 10.0) / 10.0);
-        }
-    }
-
-    private void addCountyForAllListings(List<AllListingsDto> allListingsDtos) {
-        for (AllListingsDto allListingsDto : allListingsDtos) {
-            County county = countyService.findCountyBy(allListingsDto.getCountyName());
-            allListingsDto.setCountyName(county.getName());
-        }
-    }
-
-    private void addLocationForAllListings(List<AllListingsDto> allListingsDtos) {
-        for (AllListingsDto allListingsDto : allListingsDtos) {
-            Location location = locationService.findLocationBy(allListingsDto.getLocationId()).get();
-            //LocationDto locationDto = locationMapper.toLocationDto(location);
-            allListingsDto.setLocationDto(location);
+            if (scoreInfo.getAverageScore() == null) {
+                listingPreviewDto.setAverageScore(0.0);
+            } else {
+                listingPreviewDto.setAverageScore(Math.round(scoreInfo.getAverageScore() * 10.0) / 10.0);
+            }
         }
     }
 }

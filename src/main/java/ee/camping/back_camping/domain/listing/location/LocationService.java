@@ -14,4 +14,11 @@ public class LocationService {
     public Optional<Location> findLocationBy(Integer locationId) {
         return locationRepository.findLocationBy(locationId);
     }
+    public Location findCountyBy(Integer countyId) {
+        return locationRepository.findCountyBy(countyId);
+    }
+
+//    public void getLocationBy(Integer listingId) {
+//        locationRepository.getLocationBy(listingId);
+//    }
 }

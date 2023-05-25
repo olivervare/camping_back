@@ -1,6 +1,6 @@
 package ee.camping.back_camping.domain.listing;
 
-import ee.camping.back_camping.business.listings.AllListingsDto;
+import ee.camping.back_camping.business.listings.FullListingDto;
 import ee.camping.back_camping.business.listings.ListingPreviewDto;
 import org.mapstruct.*;
 
@@ -15,12 +15,17 @@ public interface ListingMapper {
 
     List<ListingPreviewDto> toListingPreviewDtos(List<Listing> myListings);
 
-    @Mapping(source = "id", target = "listingId")
+//    @Mapping(source = "id", target = "listingId")
     @Mapping(source = "name", target = "listingName")
     @Mapping(source = "description", target = "listingDescription")
     @Mapping(source = "additionalInfo", target = "listingAdditionalInfo")
-    @Mapping(source = "price", target = "price")
-    @Mapping(source = "location", target = "locationDto")
-    AllListingsDto toAllListingsDto(Listing listings);
-    List<AllListingsDto> toAllListingsDtos(List<Listing> allListings);
+    @Mapping(source = "location.county.id", target = "countyId")
+    @Mapping(source = "location.county.name", target = "countyName")
+    @Mapping(source = "location.id", target = "locationId")
+    @Mapping(source = "location.longitude", target = "locationLongitude")
+    @Mapping(source = "location.latitude", target = "locationLatitude")
+    @Mapping(source = "location.address", target = "locationAddress")
+    FullListingDto toAllListingsDto(Listing listing);
+
+    List<FullListingDto> toAllListingsDtos(List<Listing> allListings);
 }

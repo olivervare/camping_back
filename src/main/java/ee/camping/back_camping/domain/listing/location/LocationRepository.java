@@ -9,4 +9,9 @@ public interface LocationRepository extends JpaRepository<Location, Integer> {
     @Query("select l from Location l where l.id = ?1")
     Optional<Location> findLocationBy(Integer id);
 
+    @Query("select l from Location l where l.county.id = ?1")
+    Location findCountyBy(Integer id);
+
+
+
 }

@@ -11,5 +11,8 @@ public interface ListingRepository extends JpaRepository<Listing, Integer> {
     List<Listing> findListingsBy(Integer id);
 
     @Query("select l from Listing l where l.id = ?1")
-    List<Listing> findAllListingsBy(Integer id);
+    Listing getListingBy(Integer id);
+
+    @Query("select l from Listing l where l.status = ?1")
+    List<Listing> findAllActiveListings(String status);
 }

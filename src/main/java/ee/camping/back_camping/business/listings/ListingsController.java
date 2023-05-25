@@ -18,11 +18,15 @@ public class ListingsController {
     public List<ListingPreviewDto> findMyListingsPreview(@RequestParam Integer userId) {
         return listingsService.findMyListingsPreview(userId);
     }
-
+    @GetMapping("/listings")
+    @Operation(summary = "Tagastab kõikide telkimisplatside eelvaate",
+            description = "Kuvab listingu pildi, nime (listing name), ja reitingu (average score)")
+    public List<ListingPreviewDto> findAllActiveListingsPreview() {
+        return listingsService.findAllActiveListingsPreview();
+    }
     @GetMapping("/all-listings")
-    @Operation(summary = "Tagastab listingId järgi kõikide telkimisplatside andmed",
-            description = "Kuvab listingu kõik pildid, nime (listing name), ja reitingu (average score)")
-    public List<AllListingsDto> findAllListings(@RequestParam Integer listingId) {
-        return listingsService.findAllListings(listingId);
+    @Operation(summary = "Tagastab listingId järgi kõikide telkimisplatside andmed")
+    public FullListingDto findListing(@RequestParam Integer listingId) {
+        return listingsService.findListing(listingId);
     }
 }

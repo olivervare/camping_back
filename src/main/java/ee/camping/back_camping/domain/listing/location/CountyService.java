@@ -8,7 +8,7 @@ public class CountyService {
     @Resource
     private CountyRepository countyRepository;
 
-    public County findCountyBy(String countyName) {
-        return countyRepository.findCountyBy(countyName);
+    public County findCountyBy(Integer countyId) {
+        return countyRepository.findCountyBy(countyId);
     }
 }

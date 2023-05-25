@@ -1,12 +1,13 @@
 package ee.camping.back_camping.business.listings;
 
 import ee.camping.back_camping.domain.listing.Listing;
-import ee.camping.back_camping.domain.listing.location.Location;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * A DTO for the {@link Listing} entity
@@ -14,17 +15,19 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AllListingsDto implements Serializable {
-    private Integer ListingId;
-    private String ListingName;
+public class FullListingDto implements Serializable {
+//    private Integer ListingId;
+    private String listingName;
     private String listingDescription;
     private String listingAdditionalInfo;
     private Integer price;
+    private Integer countyId;
     private String countyName;
     private Integer locationId;
-    private Location locationDto;
-
-    private String imageData;
+    private String locationAddress;
+    private BigDecimal locationLongitude;
+    private BigDecimal locationLatitude;
+    private List <String> imageDatas;
     private Long numberOfScores;
     private Double averageScore;
 }
