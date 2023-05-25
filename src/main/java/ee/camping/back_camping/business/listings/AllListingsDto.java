@@ -20,7 +20,7 @@ public class AllListingsDto implements Serializable {
     private String listingDescription;
     private String listingAdditionalInfo;
     private Integer price;
-    private String locationCountyName;
+    private String countyName;
     private Integer locationId;
     private Location locationDto;
 
