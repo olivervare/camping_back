@@ -1,14 +1,25 @@
 package ee.camping.back_camping.business.listings;
 
 import ee.camping.back_camping.business.Status;
+import ee.camping.back_camping.business.dto.AddListingResponseDto;
+import ee.camping.back_camping.business.dto.FeatureDto;
+import ee.camping.back_camping.business.dto.NewListingDto;
 import ee.camping.back_camping.domain.listing.*;
+import ee.camping.back_camping.domain.listing.feature.ListingFeature;
+import ee.camping.back_camping.domain.listing.feature.ListingFeatureMapper;
+import ee.camping.back_camping.domain.listing.feature.ListingFeatureService;
 import ee.camping.back_camping.domain.listing.image.Image;
 import ee.camping.back_camping.domain.listing.image.ImageMapper;
 import ee.camping.back_camping.domain.listing.image.ImageService;
-import ee.camping.back_camping.domain.listing.location.*;
-import ee.camping.back_camping.domain.review.ReviewService;
 import ee.camping.back_camping.domain.review.ScoreInfo;
+import ee.camping.back_camping.domain.review.ReviewService;
+import ee.camping.back_camping.domain.user.User;
+import ee.camping.back_camping.domain.user.UserService;
+import ee.camping.back_camping.domain.user.contact.Contact;
+import ee.camping.back_camping.domain.user.contact.ContactMapper;
+import ee.camping.back_camping.domain.user.contact.ContactService;
 import ee.camping.back_camping.util.ImageUtil;
+import ee.camping.back_camping.validation.ValidationService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -25,18 +36,38 @@ public class ListingsService {
     @Resource
     private ReviewService reviewService;
     @Resource
-    private LocationService locationService;
-    @Resource
-    private CountyService countyService;
-    @Resource
     private ListingMapper listingMapper;
+
     @Resource
     private ImageMapper imageMapper;
-    @Resource
-    private LocationMapper locationMapper;
-    @Resource
-    private CountyMapper countyMapper;
 
+    @Resource
+    private UserService userService;
+
+    @Resource
+    private ValidationService validationService;
+
+    @Resource
+    private ListingFeatureService listingFeatureService;
+
+    @Resource
+    private ListingFeatureMapper listingFeatureMapper;
+
+    @Resource
+    private ContactService contactService;
+
+    @Resource
+    private ContactMapper contactMapper;
+
+
+    public AddListingResponseDto addListing(NewListingDto newListingDto) {
+        listingService.validateIfListingNameIsAvailable(newListingDto.getListingName());
+        Listing listing = listingMapper.toListing(newListingDto);
+        User user = userService.findUserBy(newListingDto.getOwnerUserId());
+        listing.setOwnerUser(user);
+        listingService.addListing(listing);
+        return listingMapper.toAddListingResponseDto(listing);
+    }
 
     public List<ListingPreviewDto> findMyListingsPreview(Integer userId) {
         List<Listing> myListings = listingService.findMyListings(userId);
@@ -54,35 +85,58 @@ public class ListingsService {
         return listingPreviewDtos;
     }
 
-    public FullListingDto findListing(Integer listingId) {
-        Listing listing = listingService.getListing(listingId);
-        FullListingDto fullListingDto = listingMapper.toAllListingsDto(listing);
-        setImageDatas(listingId, fullListingDto);
-        setScoreinfo(listingId, fullListingDto);
 
-        return fullListingDto;
+    public ListingFullDto getListing(Integer listingId) {
+        Listing listing = listingService.getListingBy(listingId);
+        ListingFullDto listingFullDto = listingMapper.tolistingFullDto(listing);
+
+        Contact contact = contactService.getUserContactBy(listing.getOwnerUser().getId());
+        ContactDto contactDto = contactMapper.toContactDto(contact);
+        listingFullDto.setContact(contactDto);
+
+        addRating(listingId, listingFullDto);
+        addImages(listingId, listingFullDto);
+        addFeatures(listingId, listingFullDto);
+        return listingFullDto;
+
+
     }
 
-    private void setImageDatas(Integer listingId, FullListingDto fullListingDto) {
-        List<Image> images = imageService.findListingImages(listingId);
-        List<String> imageDatas = new ArrayList<>();
+
+
+    // ************** PRIVATE METHODS ************** //
+    private void addFeatures(Integer listingId, ListingFullDto listingFullDto) {
+        List<ListingFeature> listingFeatures = listingFeatureService.findListingFeaturesBy(listingId);
+        List<FeatureDto> featureDtos = listingFeatureMapper.toFeatureDtos(listingFeatures);
+        listingFullDto.setFeatures(featureDtos);
+    }
+
+    private void addImages(Integer listingId, ListingFullDto listingFullDto) {
+        List<Image> images = imageService.findImagesBy(listingId);
+        List<String> imagesData = new ArrayList<>();
         for (Image image : images) {
             String imageData = ImageUtil.byteArrayToBase64ImageData(image.getData());
-            imageDatas.add(imageData);
+            imagesData.add(imageData);
         }
-        fullListingDto.setImageDatas(imageDatas);
+        listingFullDto.setImagesData(imagesData);
     }
-    private void setScoreinfo(Integer listingId, FullListingDto fullListingDto) {
-        ScoreInfo scoreInfo = reviewService.findScoreInfo(listingId);
-        fullListingDto.setNumberOfScores(scoreInfo.getNumberOfScores());
-        fullListingDto.setAverageScore(scoreInfo.getAverageScore());
-    }
+
 
     private void addListingImages(List<ListingPreviewDto> listingPreviewDtos) {
         for (ListingPreviewDto listingPreviewDto : listingPreviewDtos) {
             Image coverImage = imageService.findCoverImagesBy(listingPreviewDto.getListingId());
             String imageData = ImageUtil.byteArrayToBase64ImageData(coverImage.getData());
             listingPreviewDto.setImageData(imageData);
+        }
+    }
+
+    private void addRating(Integer listingId, ListingFullDto listingFullDto) {
+        ScoreInfo scoreInfo = reviewService.findScoreInfo(listingId);
+        listingFullDto.setNumberOfScores(scoreInfo.getNumberOfScores());
+        if (scoreInfo.getAverageScore() == null) {
+            listingFullDto.setAverageScore(0.0);
+        } else {
+            listingFullDto.setAverageScore(scoreInfo.getAverageScore() * 10 / 10.0);
         }
     }
 
@@ -96,5 +150,10 @@ public class ListingsService {
                 listingPreviewDto.setAverageScore(Math.round(scoreInfo.getAverageScore() * 10.0) / 10.0);
             }
         }
+    }
+
+
+    public void deleteListing(Integer listingId) {
+        listingService.deleteListing(listingId);
     }
 }

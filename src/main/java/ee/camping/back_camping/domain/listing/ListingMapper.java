@@ -1,13 +1,18 @@
 package ee.camping.back_camping.domain.listing;
 
-import ee.camping.back_camping.business.listings.FullListingDto;
-import ee.camping.back_camping.business.listings.ListingPreviewDto;
+import ee.camping.back_camping.business.dto.*;
+import ee.camping.back_camping.business.Status;
+import ee.camping.back_camping.business.dto.ListingPreviewDto;
 import org.mapstruct.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, imports = {Status.class})
 public interface ListingMapper {
+
+    @Mapping(source = "id", target = "listingId")
+    AddListingResponseDto toAddListingResponseDto(Listing listing);
 
     @Mapping(source = "id", target = "listingId")
     @Mapping(source = "name", target = "listingName")
@@ -15,17 +20,21 @@ public interface ListingMapper {
 
     List<ListingPreviewDto> toListingPreviewDtos(List<Listing> myListings);
 
-//    @Mapping(source = "id", target = "listingId")
+
     @Mapping(source = "name", target = "listingName")
     @Mapping(source = "description", target = "listingDescription")
     @Mapping(source = "additionalInfo", target = "listingAdditionalInfo")
     @Mapping(source = "location.county.id", target = "countyId")
     @Mapping(source = "location.county.name", target = "countyName")
-    @Mapping(source = "location.id", target = "locationId")
+    @Mapping(source = "location.address", target = "locationAddress")
     @Mapping(source = "location.longitude", target = "locationLongitude")
     @Mapping(source = "location.latitude", target = "locationLatitude")
-    @Mapping(source = "location.address", target = "locationAddress")
-    FullListingDto toAllListingsDto(Listing listing);
+    @Mapping(source = "ownerUser.id", target = "ownerId")
+    ListingFullDto tolistingFullDto(Listing listing);
 
-    List<FullListingDto> toAllListingsDtos(List<Listing> allListings);
+    @Mapping(source = "listingName", target = "name")
+    @Mapping(expression = "java(Status.ACTIVE.getLetter())", target = "status")
+    Listing toListing(NewListingDto newListingDto);
+
+
 }

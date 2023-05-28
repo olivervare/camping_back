@@ -1,5 +1,6 @@
-package ee.camping.back_camping.domain.listing.location;
+package ee.camping.back_camping.business.dto;
 
+import ee.camping.back_camping.domain.listing.location.County;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

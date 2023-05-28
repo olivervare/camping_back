@@ -1,5 +1,6 @@
 package ee.camping.back_camping.domain.listing.image;
 
+import ee.camping.back_camping.business.dto.ImageDto;
 import ee.camping.back_camping.util.ImageUtil;
 import org.mapstruct.*;
 

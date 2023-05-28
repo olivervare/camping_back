@@ -1,5 +1,6 @@
 package ee.camping.back_camping.domain.listing;
 
+import ee.camping.back_camping.validation.ValidationService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,24 @@ public class ListingService {
     }
 
     public List<Listing> findAllActiveListings(String status) {
-        return listingRepository.findAllActiveListings(status);
+        return listingRepository.findAllListingsBy(status);
     }
 
+    public void validateIfListingNameIsAvailable(String listingName) {
+        boolean listingExists = listingRepository.listingExistsBy(listingName);
+        ValidationService.validateListingNameAvailability(listingExists);
+    }
+
+    public void addListing(Listing listing) {
+        listingRepository.save(listing);
+    }
+
+    public Listing getListingBy(Integer listingId) {
+        return listingRepository.findById(listingId).get();
+
+    }
+
+    public void deleteListing(Integer listingId) {
+        listingRepository.deleteById(listingId);
+    }
 }

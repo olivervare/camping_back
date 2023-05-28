@@ -1,4 +1,4 @@
-package ee.camping.back_camping.business.users;
+package ee.camping.back_camping.business.dto;
 
 import ee.camping.back_camping.domain.user.contact.Contact;
 import jakarta.validation.constraints.NotNull;
@@ -17,16 +17,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class ContactDto implements Serializable {
     private Integer userId;
-    @Size(max = 255)
-    @NotNull
     private String firstName;
-    @Size(max = 255)
-    @NotNull
     private String lastName;
-    @Size(max = 255)
-    @NotNull
     private String email;
-    @Size(max = 15)
     private String phoneNo;
     private String imageData;
 }

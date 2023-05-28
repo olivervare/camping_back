@@ -1,5 +1,6 @@
 package ee.camping.back_camping.domain.listing.location;
 
+import ee.camping.back_camping.business.dto.CountyDto;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
