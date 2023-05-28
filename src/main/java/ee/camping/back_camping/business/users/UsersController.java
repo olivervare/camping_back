@@ -45,9 +45,9 @@ public class UsersController {
         return usersService.getContact(userId);
     }
 
-    @PutMapping("/my-profile")
-    @Operation(summary = "Muudab kasutaja andmeid", description = "Kasutaja saab muuta oma nime, emaili, telnumbrit ja pilti")
-    public void editContact(@RequestParam Integer contactId, @RequestBody ContactDto contactDto) {
-        usersService.editContact(contactId, contactDto);
+    @PutMapping("/edit-profile")
+    @Operation(summary = "Kasutaja andmete muutmine", description = "Anname kasutaja userId ja muudetud väljad (eesnimi, perekonnanimi, e-post, telefoni, proofilipildi")
+    public void editContact(@RequestBody ContactDto contactDto) {
+        usersService.editContact(contactDto);
     }
 }

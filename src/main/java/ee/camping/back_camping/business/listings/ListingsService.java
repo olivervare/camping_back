@@ -99,10 +99,12 @@ public class ListingsService {
 
 
     }
-
-
+    public void deleteListing(Integer listingId) {
+        listingService.deleteListing(listingId);
+    }
 
     // ************** PRIVATE METHODS ************** //
+
     private void addFeatures(Integer listingId, ListingFullDto listingFullDto) {
         List<ListingFeature> listingFeatures = listingFeatureService.findListingFeaturesBy(listingId);
         List<FeatureDto> featureDtos = listingFeatureMapper.toFeatureDtos(listingFeatures);
@@ -150,8 +152,4 @@ public class ListingsService {
         }
     }
 
-
-    public void deleteListing(Integer listingId) {
-        listingService.deleteListing(listingId);
-    }
 }

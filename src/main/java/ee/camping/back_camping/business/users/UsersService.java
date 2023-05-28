@@ -52,19 +52,16 @@ public class UsersService {
         userService.deleteUserBy(userId);
     }
 
-    public void editContact(Integer contactId, ContactDto contactDto) {
-        Contact contact = contactService.getContactBy(contactId);
-        contactMapper.partialUpdate(contactDto, contact);
-        userService.findUserBy(contactDto.getUserId());
-
-        contactService.addContact(contact);
-
-
-    }
-
     public ContactDto getContact(Integer userId) {
         Contact contact = contactService.getUserContactBy(userId);
         return contactMapper.toContactDto(contact);
     }
-}
 
+    public void editContact(ContactDto contactDto) {
+        Contact contact = contactService.getUserContactBy(contactDto.getUserId());
+        contactMapper.partialUpdate(contactDto, contact);
+        User user = userService.findUserBy(contactDto.getUserId());
+        contact.setUser(user);
+        contactService.addContact(contact);
+    }
+}

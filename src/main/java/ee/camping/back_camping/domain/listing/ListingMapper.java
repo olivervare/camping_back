@@ -23,7 +23,6 @@ public interface ListingMapper {
     @Mapping(source = "name", target = "listingName")
     @Mapping(source = "description", target = "listingDescription")
     @Mapping(source = "additionalInfo", target = "listingAdditionalInfo")
-    @Mapping(source = "location.county.id", target = "countyId")
     @Mapping(source = "location.county.name", target = "countyName")
     @Mapping(source = "location.address", target = "locationAddress")
     @Mapping(source = "location.longitude", target = "locationLongitude")
