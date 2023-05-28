@@ -1,4 +1,4 @@
-package ee.camping.back_camping.business.listings;
+package ee.camping.back_camping.business.dto;
 
 import ee.camping.back_camping.domain.listing.Listing;
 import lombok.AllArgsConstructor;
@@ -15,19 +15,24 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FullListingDto implements Serializable {
-//    private Integer ListingId;
+public class ListingFullDto implements Serializable {
     private String listingName;
     private String listingDescription;
     private String listingAdditionalInfo;
-    private Integer price;
-    private Integer countyId;
+    private Long numberOfScores;
+    private Double averageScore;
+
+    private List <String> imagesData;
+    private List <FeatureDto> features;
+
     private String countyName;
-    private Integer locationId;
     private String locationAddress;
     private BigDecimal locationLongitude;
     private BigDecimal locationLatitude;
-    private List <String> imageDatas;
-    private Long numberOfScores;
-    private Double averageScore;
+
+    private String ownerId;
+    private ContactDto contact;
+    private Integer price;
+
+
 }

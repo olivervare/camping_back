@@ -13,10 +13,6 @@ public class ContactService {
         contactRepository.save(contact);
     }
 
-    public Contact getContactBy(Integer contactId) {
-        return contactRepository.getContactBy(contactId);
-    }
-
     public Contact getUserContactBy(Integer userId) {
         return contactRepository.getUserContactBy(userId);
     }

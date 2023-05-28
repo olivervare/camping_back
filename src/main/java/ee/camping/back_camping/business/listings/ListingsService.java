@@ -1,9 +1,7 @@
 package ee.camping.back_camping.business.listings;
 
 import ee.camping.back_camping.business.Status;
-import ee.camping.back_camping.business.dto.AddListingResponseDto;
-import ee.camping.back_camping.business.dto.FeatureDto;
-import ee.camping.back_camping.business.dto.NewListingDto;
+import ee.camping.back_camping.business.dto.*;
 import ee.camping.back_camping.domain.listing.*;
 import ee.camping.back_camping.domain.listing.feature.ListingFeature;
 import ee.camping.back_camping.domain.listing.feature.ListingFeatureMapper;
@@ -112,7 +110,7 @@ public class ListingsService {
     }
 
     private void addImages(Integer listingId, ListingFullDto listingFullDto) {
-        List<Image> images = imageService.findImagesBy(listingId);
+        List<Image> images = imageService.findImages(listingId);
         List<String> imagesData = new ArrayList<>();
         for (Image image : images) {
             String imageData = ImageUtil.byteArrayToBase64ImageData(image.getData());

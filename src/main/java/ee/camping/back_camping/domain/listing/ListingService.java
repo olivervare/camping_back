@@ -17,10 +17,6 @@ public class ListingService {
         return listingRepository.findListingsBy(userId);
     }
 
-    public Listing getListing(Integer listingId) {
-        return listingRepository.getListingBy(listingId);
-    }
-
     public List<Listing> findAllActiveListings(String status) {
         return listingRepository.findAllListingsBy(status);
     }

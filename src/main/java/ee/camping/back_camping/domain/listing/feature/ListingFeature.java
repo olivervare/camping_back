@@ -1,5 +1,6 @@
-package ee.camping.back_camping.domain.listing;
+package ee.camping.back_camping.domain.listing.feature;
 
+import ee.camping.back_camping.domain.listing.Listing;
 import ee.camping.back_camping.domain.listing.feature.Feature;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

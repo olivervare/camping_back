@@ -2,7 +2,6 @@ package ee.camping.back_camping.domain.listing;
 
 import ee.camping.back_camping.business.dto.*;
 import ee.camping.back_camping.business.Status;
-import ee.camping.back_camping.business.dto.ListingPreviewDto;
 import org.mapstruct.*;
 
 import java.math.BigDecimal;

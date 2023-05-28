@@ -1,8 +1,8 @@
 package ee.camping.back_camping.business.listings;
 
 import ee.camping.back_camping.business.dto.AddListingResponseDto;
-import ee.camping.back_camping.business.Dtos.ListingFullDto;
-import ee.camping.back_camping.business.Dtos.ListingPreviewDto;
+import ee.camping.back_camping.business.dto.ListingFullDto;
+import ee.camping.back_camping.business.dto.ListingPreviewDto;
 import ee.camping.back_camping.business.dto.NewListingDto;
 import ee.camping.back_camping.infrastructure.error.ApiError;
 import io.swagger.v3.oas.annotations.Operation;
