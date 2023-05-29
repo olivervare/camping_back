@@ -12,10 +12,6 @@ import java.io.Serializable;
  */
 @Data
 public class NewUserDto implements Serializable {
-    @Size(max = 255)
-    @NotNull
     private String username;
-    @Size(max = 255)
-    @NotNull
     private String password;
 }

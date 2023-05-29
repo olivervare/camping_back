@@ -19,6 +19,7 @@ import java.util.List;
 public class AddFullListingDto implements Serializable {
     private Integer listingId;
     private String listingName;
+    private Integer ownerUserId;
     private String description;
     private String additionalInfo;
     private Integer price;

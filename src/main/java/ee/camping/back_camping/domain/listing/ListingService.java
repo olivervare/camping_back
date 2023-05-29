@@ -38,4 +38,8 @@ public class ListingService {
     public void deleteListing(Integer listingId) {
         listingRepository.deleteById(listingId);
     }
+
+    public void addFullListing(Listing listing) {
+        listingRepository.save(listing);
+    }
 }

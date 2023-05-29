@@ -3,9 +3,7 @@ package ee.camping.back_camping.business.listings;
 import ee.camping.back_camping.business.Status;
 import ee.camping.back_camping.business.dto.*;
 import ee.camping.back_camping.domain.listing.*;
-import ee.camping.back_camping.domain.listing.feature.ListingFeature;
-import ee.camping.back_camping.domain.listing.feature.ListingFeatureMapper;
-import ee.camping.back_camping.domain.listing.feature.ListingFeatureService;
+import ee.camping.back_camping.domain.listing.feature.*;
 import ee.camping.back_camping.domain.listing.image.Image;
 import ee.camping.back_camping.domain.listing.image.ImageMapper;
 import ee.camping.back_camping.domain.listing.image.ImageService;
@@ -20,7 +18,6 @@ import ee.camping.back_camping.domain.user.contact.ContactService;
 import ee.camping.back_camping.util.ImageUtil;
 import ee.camping.back_camping.validation.ValidationService;
 import jakarta.annotation.Resource;
-import org.springframework.core.SpringVersion;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -50,6 +47,9 @@ public class ListingsService {
 
     @Resource
     private ValidationService validationService;
+
+    @Resource
+    private FeatureService featureService;
 
     @Resource
     private ListingFeatureService listingFeatureService;
@@ -121,7 +121,7 @@ public class ListingsService {
     }
 
     private void addImages(Integer listingId, ListingFullDto listingFullDto) {
-        List<Image> images = imageService.findImages(listingId);
+        List<Image> images = imageService.findImagesBy(listingId);
         List<String> imagesData = new ArrayList<>();
         for (Image image : images) {
             String imageData = ImageUtil.byteArrayToBase64ImageData(image.getData());
@@ -163,10 +163,30 @@ public class ListingsService {
 
     public void addFullListing(AddFullListingDto addFullListingDto) {
         Listing listing = listingMapper.toListing(addFullListingDto);
+        User user = userService.findUserBy(addFullListingDto.getOwnerUserId());
+        listing.setOwnerUser(user);
         Location location = locationMapper.toLocation(addFullListingDto);
         County county = countyService.getCountyBy(addFullListingDto.getLocationCountyId());
         location.setCounty(county);
+        // todo: LISA PILDID KA!
+        listingService.addFullListing(listing);
+        List<ListingFeature> listingFeatures = createListingFeatures(addFullListingDto.getFeatures(), listing);
+        listingFeatureService.addAll(listingFeatures);
 
+    }
 
+    private List<ListingFeature> createListingFeatures(List<FeatureDto> features, Listing listing) {
+        List<ListingFeature> listingFeatures = new ArrayList<>();
+
+        for (FeatureDto type : features) {
+            Feature feature = featureService.getFeatureBy(type.getFeatureId());
+
+            ListingFeature listingFeature = new ListingFeature();
+            listingFeature.setFeature(feature);
+            listingFeature.setListing(listing);
+            listingFeature.setIsSelected(type.getFeatureIsSelected());
+            listingFeatures.add(listingFeature);
+        }
+        return listingFeatures;
     }
 }

@@ -15,7 +15,7 @@ public class ImageService {
         return imageRepository.findImageBy(listingId);
     }
 
-    public List<Image> findImages(Integer listingId) {
+    public List<Image> findImagesBy(Integer listingId) {
         return imageRepository.findImagesBy(listingId);
     }
 }
