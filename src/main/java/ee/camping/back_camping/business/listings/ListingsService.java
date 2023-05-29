@@ -9,6 +9,7 @@ import ee.camping.back_camping.domain.listing.feature.ListingFeatureService;
 import ee.camping.back_camping.domain.listing.image.Image;
 import ee.camping.back_camping.domain.listing.image.ImageMapper;
 import ee.camping.back_camping.domain.listing.image.ImageService;
+import ee.camping.back_camping.domain.listing.location.*;
 import ee.camping.back_camping.domain.review.ScoreInfo;
 import ee.camping.back_camping.domain.review.ReviewService;
 import ee.camping.back_camping.domain.user.User;
@@ -19,6 +20,7 @@ import ee.camping.back_camping.domain.user.contact.ContactService;
 import ee.camping.back_camping.util.ImageUtil;
 import ee.camping.back_camping.validation.ValidationService;
 import jakarta.annotation.Resource;
+import org.springframework.core.SpringVersion;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,6 +35,10 @@ public class ListingsService {
     private ImageService imageService;
     @Resource
     private ReviewService reviewService;
+    @Resource
+    private LocationService locationService;
+    @Resource
+    private CountyService countyService;
     @Resource
     private ListingMapper listingMapper;
 
@@ -56,6 +62,9 @@ public class ListingsService {
 
     @Resource
     private ContactMapper contactMapper;
+
+    @Resource
+    private LocationMapper locationMapper;
 
 
     public AddListingResponseDto addListing(NewListingDto newListingDto) {
@@ -152,4 +161,12 @@ public class ListingsService {
         }
     }
 
+    public void addFullListing(AddFullListingDto addFullListingDto) {
+        Listing listing = listingMapper.toListing(addFullListingDto);
+        Location location = locationMapper.toLocation(addFullListingDto);
+        County county = countyService.getCountyBy(addFullListingDto.getLocationCountyId());
+        location.setCounty(county);
+
+
+    }
 }

@@ -1,5 +1,6 @@
 package ee.camping.back_camping.domain.listing.location;
 
+import ee.camping.back_camping.business.dto.AddFullListingDto;
 import ee.camping.back_camping.business.dto.LocationDto;
 import org.mapstruct.*;
 
@@ -12,4 +13,9 @@ public interface LocationMapper {
     @Mapping(source = "latitude", target = "locationLatitude")
     LocationDto toLocationDto(Location location);
 
+    @Mapping(source = "locationAddress", target = "address")
+    @Mapping(source = "locationLatitude", target = "latitude")
+    @Mapping(source = "locationLongitude", target = "longitude")
+    @Mapping(source = "locationCountyId", target = "county.id")
+    Location toLocation(AddFullListingDto addFullListingDto);
 }

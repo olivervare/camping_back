@@ -1,5 +1,6 @@
 package ee.camping.back_camping.domain.listing.image;
 
+import ee.camping.back_camping.business.dto.AddFullListingDto;
 import ee.camping.back_camping.business.dto.ImageDto;
 import ee.camping.back_camping.util.ImageUtil;
 import org.mapstruct.*;
@@ -9,10 +10,21 @@ import java.util.List;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ImageMapper {
 
+    @Mapping(source = "", target = "data", qualifiedByName = "imageDataToImage")
+    Image toImage(AddFullListingDto addFullListingDto);
+
     @Mapping(source = "data", target = "imageData", qualifiedByName = "imageToImageData")
     ImageDto toImageDto(Image image);
 
     List<ImageDto> toImagesDto(List<Image> listingImages);
+
+    @Named("imageDataToImage")
+    static byte[] imageDataToImage(String imageData) {
+        if (imageData.isEmpty()) {
+            return null;
+        }
+        return ImageUtil.base64ImageDataToByteArray(imageData);
+    }
 
     @Named("imageToImageData")
     static String imageToImageData(byte[] data) {
