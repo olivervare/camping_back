@@ -39,7 +39,7 @@ public class ListingService {
         listingRepository.deleteById(listingId);
     }
 
-    public void addFullListing(Listing listing) {
+    public void saveListing(Listing listing) {
         listingRepository.save(listing);
     }
 }

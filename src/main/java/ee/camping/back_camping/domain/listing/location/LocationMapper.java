@@ -16,6 +16,5 @@ public interface LocationMapper {
     @Mapping(source = "locationAddress", target = "address")
     @Mapping(source = "locationLatitude", target = "latitude")
     @Mapping(source = "locationLongitude", target = "longitude")
-    @Mapping(source = "locationCountyId", target = "county.id")
     Location toLocation(AddFullListingDto addFullListingDto);
 }

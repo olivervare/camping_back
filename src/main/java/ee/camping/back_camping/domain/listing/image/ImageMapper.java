@@ -10,8 +10,6 @@ import java.util.List;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ImageMapper {
 
-    @Mapping(source = "", target = "data", qualifiedByName = "imageDataToImage")
-    Image toImage(AddFullListingDto addFullListingDto);
 
     @Mapping(source = "data", target = "imageData", qualifiedByName = "imageToImageData")
     ImageDto toImageDto(Image image);

@@ -168,23 +168,38 @@ public class ListingsService {
         Location location = locationMapper.toLocation(addFullListingDto);
         County county = countyService.getCountyBy(addFullListingDto.getLocationCountyId());
         location.setCounty(county);
-        // todo: LISA PILDID KA!
-        listingService.addFullListing(listing);
+        locationService.saveLocation(location);
+        listing.setLocation(location);
+        listingService.saveListing(listing);
+
+        createImages(addFullListingDto.getImagesData(), listing);
+
         List<ListingFeature> listingFeatures = createListingFeatures(addFullListingDto.getFeatures(), listing);
         listingFeatureService.addAll(listingFeatures);
 
     }
 
+    private List<Image> createImages(List<String> imagesData, Listing listing) {
+        List<Image> images = new ArrayList<>();
+        for (String imageData : imagesData) {
+            byte[] data = ImageUtil.base64ImageDataToByteArray(imageData);
+            Image image = new Image();
+            image.setListing(listing);
+            images.add(image);
+        }
+        return images;
+    }
+
     private List<ListingFeature> createListingFeatures(List<FeatureDto> features, Listing listing) {
         List<ListingFeature> listingFeatures = new ArrayList<>();
 
-        for (FeatureDto type : features) {
-            Feature feature = featureService.getFeatureBy(type.getFeatureId());
+        for (FeatureDto dto : features) {
+            Feature feature = featureService.getFeatureBy(dto.getFeatureId());
 
             ListingFeature listingFeature = new ListingFeature();
             listingFeature.setFeature(feature);
             listingFeature.setListing(listing);
-            listingFeature.setIsSelected(type.getFeatureIsSelected());
+            listingFeature.setIsSelected(dto.getFeatureIsSelected());
             listingFeatures.add(listingFeature);
         }
         return listingFeatures;

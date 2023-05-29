@@ -36,5 +36,6 @@ public interface ListingMapper {
 
     @Mapping(source = "listingId", target = "id")
     @Mapping(source = "listingName", target = "name")
+    @Mapping(expression = "java(Status.ACTIVE.getLetter())", target = "status")
     Listing toListing(AddFullListingDto addFullListingDto);
 }

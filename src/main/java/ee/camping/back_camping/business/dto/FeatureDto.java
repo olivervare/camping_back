@@ -17,6 +17,5 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class FeatureDto implements Serializable {
     private Integer featureId;
-    private String featureName;
     private Boolean featureIsSelected;
 }

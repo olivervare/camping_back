@@ -33,7 +33,7 @@ public class ListingsController {
         return listingsService.addListing(newListingDto);
     }
 
-    @PostMapping("/add-listing")
+    @PutMapping("/add-listing")
     @Operation(summary = "Lisab uue telkimisplatsi täisinfo")
     public void addFullListing(@RequestBody AddFullListingDto addFullListingDto) {
         listingsService.addFullListing(addFullListingDto);

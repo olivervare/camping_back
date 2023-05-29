@@ -18,6 +18,10 @@ public class LocationService {
         return locationRepository.findCountyBy(countyId);
     }
 
+    public void saveLocation(Location location) {
+        locationRepository.save(location);
+    }
+
 //    public Location getLocationBy(Integer locationId) {
 //        locationRepository.find
 //    }
