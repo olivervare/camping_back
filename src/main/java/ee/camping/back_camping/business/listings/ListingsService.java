@@ -2,14 +2,16 @@ package ee.camping.back_camping.business.listings;
 
 import ee.camping.back_camping.business.Status;
 import ee.camping.back_camping.business.dto.*;
-import ee.camping.back_camping.domain.listing.*;
+import ee.camping.back_camping.domain.listing.Listing;
+import ee.camping.back_camping.domain.listing.ListingMapper;
+import ee.camping.back_camping.domain.listing.ListingService;
 import ee.camping.back_camping.domain.listing.feature.*;
 import ee.camping.back_camping.domain.listing.image.Image;
 import ee.camping.back_camping.domain.listing.image.ImageMapper;
 import ee.camping.back_camping.domain.listing.image.ImageService;
 import ee.camping.back_camping.domain.listing.location.*;
-import ee.camping.back_camping.domain.review.ScoreInfo;
 import ee.camping.back_camping.domain.review.ReviewService;
+import ee.camping.back_camping.domain.review.ScoreInfo;
 import ee.camping.back_camping.domain.user.User;
 import ee.camping.back_camping.domain.user.UserService;
 import ee.camping.back_camping.domain.user.contact.Contact;
@@ -38,34 +40,24 @@ public class ListingsService {
     private CountyService countyService;
     @Resource
     private ListingMapper listingMapper;
-
     @Resource
     private ImageMapper imageMapper;
-
     @Resource
     private UserService userService;
-
     @Resource
     private ValidationService validationService;
-
     @Resource
     private FeatureService featureService;
-
     @Resource
     private ListingFeatureService listingFeatureService;
-
     @Resource
     private ListingFeatureMapper listingFeatureMapper;
-
     @Resource
     private ContactService contactService;
-
     @Resource
     private ContactMapper contactMapper;
-
     @Resource
     private LocationMapper locationMapper;
-
 
     public AddListingResponseDto addListing(NewListingDto newListingDto) {
         listingService.validateIfListingNameIsAvailable(newListingDto.getListingName());
@@ -77,7 +69,7 @@ public class ListingsService {
     }
 
     public List<ListingPreviewDto> findMyListingsPreview(Integer userId) {
-        List<Listing> myListings = listingService.findMyListings(userId);
+        List<Listing> myListings = listingService.findMyListings(userId, Status.ACTIVE.getLetter());
         List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(myListings);
         addListingImages(listingPreviewDtos);
         addRatings(listingPreviewDtos);
@@ -92,7 +84,6 @@ public class ListingsService {
         return listingPreviewDtos;
     }
 
-
     public ListingFullDto getListing(Integer listingId) {
         Listing listing = listingService.getListingBy(listingId);
         ListingFullDto listingFullDto = listingMapper.tolistingFullDto(listing);
@@ -105,12 +96,34 @@ public class ListingsService {
         addImages(listingId, listingFullDto);
         addFeatures(listingId, listingFullDto);
         return listingFullDto;
-
-
     }
+
     public void deleteListing(Integer listingId) {
         listingService.deleteListing(listingId);
     }
+
+    public void addFullListing(AddFullListingDto addFullListingDto) {
+        Listing listing = listingMapper.toListing(addFullListingDto);
+        User user = userService.findUserBy(addFullListingDto.getOwnerUserId());
+        listing.setOwnerUser(user);
+        Location location = locationMapper.toLocation(addFullListingDto);
+        County county = countyService.getCountyBy(addFullListingDto.getLocationCountyId());
+        location.setCounty(county);
+        locationService.saveLocation(location);
+        listing.setLocation(location);
+        listingService.saveListing(listing);
+        List<Image> images = createImages(addFullListingDto.getImagesData(), listing);
+        imageService.addAll(images);
+        List<ListingFeature> listingFeatures = createListingFeatures(addFullListingDto.getFeatures(), listing);
+        listingFeatureService.addAll(listingFeatures);
+    }
+
+    public void deactivateListing(Integer listingId) {
+        Listing listing = listingService.getListingBy(listingId);
+        listing.setStatus(Status.DELETED.getLetter());
+        listingService.saveListing(listing);
+    }
+
 
     // ************** PRIVATE METHODS ************** //
 
@@ -161,29 +174,12 @@ public class ListingsService {
         }
     }
 
-    public void addFullListing(AddFullListingDto addFullListingDto) {
-        Listing listing = listingMapper.toListing(addFullListingDto);
-        User user = userService.findUserBy(addFullListingDto.getOwnerUserId());
-        listing.setOwnerUser(user);
-        Location location = locationMapper.toLocation(addFullListingDto);
-        County county = countyService.getCountyBy(addFullListingDto.getLocationCountyId());
-        location.setCounty(county);
-        locationService.saveLocation(location);
-        listing.setLocation(location);
-        listingService.saveListing(listing);
-
-        createImages(addFullListingDto.getImagesData(), listing);
-
-        List<ListingFeature> listingFeatures = createListingFeatures(addFullListingDto.getFeatures(), listing);
-        listingFeatureService.addAll(listingFeatures);
-
-    }
-
     private List<Image> createImages(List<String> imagesData, Listing listing) {
         List<Image> images = new ArrayList<>();
         for (String imageData : imagesData) {
-            byte[] data = ImageUtil.base64ImageDataToByteArray(imageData);
             Image image = new Image();
+            byte[] data = ImageUtil.base64ImageDataToByteArray(imageData);
+            image.setData(data);
             image.setListing(listing);
             images.add(image);
         }

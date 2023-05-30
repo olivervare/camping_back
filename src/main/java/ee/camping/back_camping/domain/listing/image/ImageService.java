@@ -18,4 +18,8 @@ public class ImageService {
     public List<Image> findImagesBy(Integer listingId) {
         return imageRepository.findImagesBy(listingId);
     }
+
+    public void addAll(List<Image> images) {
+        imageRepository.saveAll(images);
+    }
 }

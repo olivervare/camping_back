@@ -1,6 +1,5 @@
 package ee.camping.back_camping.business.dto;
 
-import ee.camping.back_camping.business.dto.FeatureDto;
 import ee.camping.back_camping.domain.listing.Listing;
 import lombok.AllArgsConstructor;
 import lombok.Data;

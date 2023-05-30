@@ -14,7 +14,7 @@ public class CountiesController {
     @Resource
     private CountiesService countiesService;
 
-    @GetMapping("/listing-counties")
+    @GetMapping("/add-listing-counties")
     @Operation(summary = "Tagastab kõikide maakondade id-d ja nimed")
     public List<CountyDto> getCounties() {
         return countiesService.getCounties();

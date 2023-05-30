@@ -34,7 +34,7 @@ public class ListingsController {
     }
 
     @PutMapping("/add-listing")
-    @Operation(summary = "Lisab uue telkimisplatsi täisinfo")
+    @Operation(summary = "Täiendab/uuendab telkimisplatsi täisinfo")
     public void addFullListing(@RequestBody AddFullListingDto addFullListingDto) {
         listingsService.addFullListing(addFullListingDto);
     }
@@ -58,4 +58,13 @@ public class ListingsController {
     public ListingFullDto getListing(@RequestParam Integer listingId) {
         return listingsService.getListing(listingId);
     }
+
+    @DeleteMapping("/my-listings")
+    @Operation(summary = "Telkimisplatsi kustutamine(deaktiveerimine)", description = "Anname listingId ja märgime staatuse deaktiivseks.")
+    public void deactivateListing(@RequestParam Integer listingId) {
+        listingsService.deactivateListing(listingId);
+    }
+
+
+
 }
