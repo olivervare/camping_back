@@ -21,6 +21,7 @@ import ee.camping.back_camping.util.ImageUtil;
 import ee.camping.back_camping.validation.ValidationService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +103,7 @@ public class ListingsService {
         listingService.deleteListing(listingId);
     }
 
+    @Transactional
     public void addFullListing(AddFullListingDto addFullListingDto) {
         Listing listing = listingMapper.toListing(addFullListingDto);
         User user = userService.findUserBy(addFullListingDto.getOwnerUserId());
