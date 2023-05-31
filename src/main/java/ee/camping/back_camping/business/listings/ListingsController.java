@@ -53,6 +53,21 @@ public class ListingsController {
         return listingsService.findAllActiveListingsPreview();
     }
 
+    @GetMapping("/listings-by-listing-id")
+    @Operation(summary = "Tagastab avalehele kõikidest telkimisplatsidest neli eelvaadet",
+            description = "Kuvab listingu pildi, nime (listing name), ja reitingu (average score), " +
+                    "ja võimaldab neid järjestada kahanevalt listingId järgi")
+    public List<ListingPreviewDto> findAllActiveListingsPreviewSortById() {
+        return listingsService.findAndSortAllActiveListingsPreview();
+    }
+    @GetMapping("/listings-by-rating")
+    @Operation(summary = "Tagastab avalehele kõikidest telkimisplatsidest neli eelvaadet",
+            description = "Kuvab listingu pildi, nime (listing name), ja reitingu (average score), " +
+                    "ja võimaldab neid järjestada kahanevalt reitingu järgi")
+    public List<ListingPreviewDto> findAllActiveListingsPreviewSortByRating() {
+        return listingsService.findAllActiveListingsPreviewSortByRating();
+    }
+
     @GetMapping("/listing")
     @Operation(summary = "Tagastab kogu info ühe konkreetse listingu kohta", description = "Anname listingId ja tagastame antud listing kõik andmed")
     public ListingFullDto getListing(@RequestParam Integer listingId) {

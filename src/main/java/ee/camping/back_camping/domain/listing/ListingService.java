@@ -21,6 +21,10 @@ public class ListingService {
         return listingRepository.findAllListingsBy(status);
     }
 
+    public List<Listing> findAllActiveListingsSortedById(String status) {
+        return listingRepository.findAndSortByListingIdAllListings(status);
+    }
+
     public void validateIfListingNameIsAvailable(String listingName) {
         boolean listingExists = listingRepository.listingExistsBy(listingName);
         ValidationService.validateListingNameAvailability(listingExists);

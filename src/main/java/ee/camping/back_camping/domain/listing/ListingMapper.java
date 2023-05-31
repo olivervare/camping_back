@@ -20,6 +20,7 @@ public interface ListingMapper {
     List<ListingPreviewDto> toListingPreviewDtos(List<Listing> myListings);
 
 
+
     @Mapping(source = "name", target = "listingName")
     @Mapping(source = "description", target = "listingDescription")
     @Mapping(source = "additionalInfo", target = "listingAdditionalInfo")
@@ -38,4 +39,6 @@ public interface ListingMapper {
     @Mapping(source = "listingName", target = "name")
     @Mapping(expression = "java(Status.ACTIVE.getLetter())", target = "status")
     Listing toListing(AddFullListingDto addFullListingDto);
+
+
 }

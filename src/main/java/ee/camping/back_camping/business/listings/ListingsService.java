@@ -7,7 +7,6 @@ import ee.camping.back_camping.domain.listing.ListingMapper;
 import ee.camping.back_camping.domain.listing.ListingService;
 import ee.camping.back_camping.domain.listing.feature.*;
 import ee.camping.back_camping.domain.listing.image.Image;
-import ee.camping.back_camping.domain.listing.image.ImageMapper;
 import ee.camping.back_camping.domain.listing.image.ImageService;
 import ee.camping.back_camping.domain.listing.location.*;
 import ee.camping.back_camping.domain.review.ReviewService;
@@ -18,12 +17,12 @@ import ee.camping.back_camping.domain.user.contact.Contact;
 import ee.camping.back_camping.domain.user.contact.ContactMapper;
 import ee.camping.back_camping.domain.user.contact.ContactService;
 import ee.camping.back_camping.util.ImageUtil;
-import ee.camping.back_camping.validation.ValidationService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -42,11 +41,7 @@ public class ListingsService {
     @Resource
     private ListingMapper listingMapper;
     @Resource
-    private ImageMapper imageMapper;
-    @Resource
     private UserService userService;
-    @Resource
-    private ValidationService validationService;
     @Resource
     private FeatureService featureService;
     @Resource
@@ -73,7 +68,7 @@ public class ListingsService {
         List<Listing> myListings = listingService.findMyListings(userId, Status.ACTIVE.getLetter());
         List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(myListings);
         addListingImages(listingPreviewDtos);
-        addRatings(listingPreviewDtos);
+        addRatingsAndSort(listingPreviewDtos);
         return listingPreviewDtos;
     }
 
@@ -81,10 +76,25 @@ public class ListingsService {
         List<Listing> allActiveListings = listingService.findAllActiveListings(Status.ACTIVE.getLetter());
         List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(allActiveListings);
         addListingImages(listingPreviewDtos);
-        addRatings(listingPreviewDtos);
+        addRatingsAndSort(listingPreviewDtos);
         return listingPreviewDtos;
     }
 
+    public List<ListingPreviewDto> findAndSortAllActiveListingsPreview() {
+        List<Listing> allActiveListingsSortedById = listingService.findAllActiveListingsSortedById(Status.ACTIVE.getLetter());
+        List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(allActiveListingsSortedById);
+        addListingImages(listingPreviewDtos);
+        addRatings(listingPreviewDtos);
+        return listingPreviewDtos;
+    }
+    public List<ListingPreviewDto> findAllActiveListingsPreviewSortByRating() {
+        List<Listing> allActiveListings = listingService.findAllActiveListings(Status.ACTIVE.getLetter());
+        List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(allActiveListings);
+        addListingImages(listingPreviewDtos);
+        addRatingsAndSort(listingPreviewDtos);
+        List<ListingPreviewDto> firstTwoRatings = listingPreviewDtos.subList(0, 2);
+        return firstTwoRatings;
+    }
     public ListingFullDto getListing(Integer listingId) {
         Listing listing = listingService.getListingBy(listingId);
         ListingFullDto listingFullDto = listingMapper.tolistingFullDto(listing);
@@ -164,7 +174,7 @@ public class ListingsService {
         }
     }
 
-    private void addRatings(List<ListingPreviewDto> listingPreviewDtos) {
+    private void addRatingsAndSort(List<ListingPreviewDto> listingPreviewDtos) {
         for (ListingPreviewDto listingPreviewDto : listingPreviewDtos) {
             ScoreInfo scoreInfo = reviewService.findScoreInfo(listingPreviewDto.getListingId());
             listingPreviewDto.setNumberOfScores(scoreInfo.getNumberOfScores());
@@ -172,6 +182,18 @@ public class ListingsService {
                 listingPreviewDto.setAverageScore(0.0);
             } else {
                 listingPreviewDto.setAverageScore(Math.round(scoreInfo.getAverageScore() * 10.0) / 10.0);
+            }
+        }
+        listingPreviewDtos.sort(Comparator.comparingDouble(ListingPreviewDto::getAverageScore).reversed());
+    }
+    private void addRatings(List<ListingPreviewDto> listingPreviewDtos) {
+        for (ListingPreviewDto Dto : listingPreviewDtos) {
+            ScoreInfo scoreInfo = reviewService.findScoreInfo(Dto.getListingId());
+            Dto.setNumberOfScores(scoreInfo.getNumberOfScores());
+            if (scoreInfo.getAverageScore() == null) {
+                Dto.setAverageScore(0.0);
+            } else {
+                Dto.setAverageScore(Math.round(scoreInfo.getAverageScore() * 10.0) / 10.0);
             }
         }
     }
@@ -202,4 +224,5 @@ public class ListingsService {
         }
         return listingFeatures;
     }
+
 }
