@@ -60,6 +60,7 @@ public class ListingsController {
     public List<ListingPreviewDto> findAllActiveListingsPreviewSortById() {
         return listingsService.findAndSortAllActiveListingsPreview();
     }
+
     @GetMapping("/listings-by-rating")
     @Operation(summary = "Tagastab avalehele kõikidest telkimisplatsidest neli eelvaadet",
             description = "Kuvab listingu pildi, nime (listing name), ja reitingu (average score), " +
@@ -80,6 +81,9 @@ public class ListingsController {
         listingsService.deactivateListing(listingId);
     }
 
-
-
+    @GetMapping("/listings-filter")
+    @Operation(summary = "Tagastab telkimisplatside eelvaated läbi valitud filtri")
+    public List<ListingPreviewDto> findListingPreviewsThruFiltering(@RequestParam Integer countyId) {
+        return listingsService.findListingPreviewsThruFiltering(countyId);
+    }
 }

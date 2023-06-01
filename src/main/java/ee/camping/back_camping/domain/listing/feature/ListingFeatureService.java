@@ -20,4 +20,12 @@ public class ListingFeatureService {
     public void addAll(List<ListingFeature> listingFeatures) {
         listingFeatureRepository.saveAll(listingFeatures);
     }
+
+    public List<ListingFeature> getListingIdBy(Integer featureId, Boolean isSelected) {
+        return listingFeatureRepository.getListingId(featureId, isSelected);
+    }
+
+    public ListingFeature getFeatureBy(Integer featureId, Boolean featureIsSelected) {
+        return listingFeatureRepository.getFeatureBy(featureId, featureIsSelected);
+    }
 }

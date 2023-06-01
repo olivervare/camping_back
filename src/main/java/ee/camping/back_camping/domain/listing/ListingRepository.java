@@ -2,6 +2,7 @@ package ee.camping.back_camping.domain.listing;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -18,5 +19,8 @@ public interface ListingRepository extends JpaRepository<Listing, Integer> {
 
     @Query("select (count(l) > 0) from Listing l where l.name = ?1")
     boolean listingExistsBy(String name);
+
+    @Query("select l from Listing l where l.location.county.id = ?1 and l.status = ?2")
+    List<Listing> findListingsByCountyId(Integer countyId, String status);
 
 }

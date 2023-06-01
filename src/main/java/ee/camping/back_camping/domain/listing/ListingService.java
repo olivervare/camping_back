@@ -36,14 +36,14 @@ public class ListingService {
 
     public Listing getListingBy(Integer listingId) {
         return listingRepository.findById(listingId).get();
+    }
 
+    public List<Listing> getListingByCountyId(Integer countyId, String status) {
+        return listingRepository.findListingsByCountyId(countyId, status);
     }
 
     public void deleteListing(Integer listingId) {
         listingRepository.deleteById(listingId);
     }
 
-    public void saveListing(Listing listing) {
-        listingRepository.save(listing);
-    }
 }

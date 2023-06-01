@@ -68,7 +68,7 @@ public class ListingsService {
         List<Listing> myListings = listingService.findMyListings(userId, Status.ACTIVE.getLetter());
         List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(myListings);
         addListingImages(listingPreviewDtos);
-        addRatingsAndSort(listingPreviewDtos);
+        addRatings(listingPreviewDtos);
         return listingPreviewDtos;
     }
 
@@ -76,7 +76,7 @@ public class ListingsService {
         List<Listing> allActiveListings = listingService.findAllActiveListings(Status.ACTIVE.getLetter());
         List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(allActiveListings);
         addListingImages(listingPreviewDtos);
-        addRatingsAndSort(listingPreviewDtos);
+        addRatings(listingPreviewDtos);
         return listingPreviewDtos;
     }
 
@@ -91,9 +91,9 @@ public class ListingsService {
         List<Listing> allActiveListings = listingService.findAllActiveListings(Status.ACTIVE.getLetter());
         List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(allActiveListings);
         addListingImages(listingPreviewDtos);
-        addRatingsAndSort(listingPreviewDtos);
-        List<ListingPreviewDto> firstTwoRatings = listingPreviewDtos.subList(0, 2);
-        return firstTwoRatings;
+        addRatings(listingPreviewDtos);
+        listingPreviewDtos.sort(Comparator.comparingDouble(ListingPreviewDto::getAverageScore).reversed());
+        return listingPreviewDtos.subList(0, 2);
     }
     public ListingFullDto getListing(Integer listingId) {
         Listing listing = listingService.getListingBy(listingId);
@@ -107,6 +107,16 @@ public class ListingsService {
         addImages(listingId, listingFullDto);
         addFeatures(listingId, listingFullDto);
         return listingFullDto;
+    }
+
+    public List<ListingPreviewDto> findListingPreviewsThruFiltering(Integer countyId) {
+        List<Listing> listings = listingService.getListingByCountyId(countyId, Status.ACTIVE.getLetter());
+        List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(listings);
+//        List<ListingFeature> extraction = extractFeatures(featureDtos);
+//        listingFeatureService.addAll(extraction);
+        addListingImages(listingPreviewDtos);
+        addRatings(listingPreviewDtos);
+        return listingPreviewDtos;
     }
 
     public void deleteListing(Integer listingId) {
@@ -123,7 +133,7 @@ public class ListingsService {
         location.setCounty(county);
         locationService.saveLocation(location);
         listing.setLocation(location);
-        listingService.saveListing(listing);
+        listingService.addListing(listing);
         List<Image> images = createImages(addFullListingDto.getImagesData(), listing);
         imageService.addAll(images);
         List<ListingFeature> listingFeatures = createListingFeatures(addFullListingDto.getFeatures(), listing);
@@ -133,7 +143,7 @@ public class ListingsService {
     public void deactivateListing(Integer listingId) {
         Listing listing = listingService.getListingBy(listingId);
         listing.setStatus(Status.DELETED.getLetter());
-        listingService.saveListing(listing);
+        listingService.addListing(listing);
     }
 
 
@@ -174,7 +184,7 @@ public class ListingsService {
         }
     }
 
-    private void addRatingsAndSort(List<ListingPreviewDto> listingPreviewDtos) {
+    private void addRatings(List<ListingPreviewDto> listingPreviewDtos) {
         for (ListingPreviewDto listingPreviewDto : listingPreviewDtos) {
             ScoreInfo scoreInfo = reviewService.findScoreInfo(listingPreviewDto.getListingId());
             listingPreviewDto.setNumberOfScores(scoreInfo.getNumberOfScores());
@@ -182,18 +192,6 @@ public class ListingsService {
                 listingPreviewDto.setAverageScore(0.0);
             } else {
                 listingPreviewDto.setAverageScore(Math.round(scoreInfo.getAverageScore() * 10.0) / 10.0);
-            }
-        }
-        listingPreviewDtos.sort(Comparator.comparingDouble(ListingPreviewDto::getAverageScore).reversed());
-    }
-    private void addRatings(List<ListingPreviewDto> listingPreviewDtos) {
-        for (ListingPreviewDto Dto : listingPreviewDtos) {
-            ScoreInfo scoreInfo = reviewService.findScoreInfo(Dto.getListingId());
-            Dto.setNumberOfScores(scoreInfo.getNumberOfScores());
-            if (scoreInfo.getAverageScore() == null) {
-                Dto.setAverageScore(0.0);
-            } else {
-                Dto.setAverageScore(Math.round(scoreInfo.getAverageScore() * 10.0) / 10.0);
             }
         }
     }
@@ -224,5 +222,15 @@ public class ListingsService {
         }
         return listingFeatures;
     }
+    private List<ListingFeature> extractFeatures(List<FeatureDto> features) {
+        List<ListingFeature> listingFeatures = new ArrayList<>();
+        for (FeatureDto dto : features) {
+            ListingFeature listingFeature = listingFeatureService.getFeatureBy(dto.getFeatureId(), dto.getFeatureIsSelected());
+            listingFeatureService.getListingIdBy(listingFeature.getId(), true);
 
+            listingFeature.setIsSelected(dto.getFeatureIsSelected());
+            listingFeatures.add(listingFeature);
+        }
+        return listingFeatures;
+    }
 }
