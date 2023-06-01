@@ -87,6 +87,15 @@ public class ListingsService {
         addRatings(listingPreviewDtos);
         return listingPreviewDtos;
     }
+
+    public List<ListingPreviewDto> findAllActiveListingsPreviewSortByPrice() {
+        List<Listing> allActiveListings = listingService.findAllActiveListingsSortedByPrice(Status.ACTIVE.getLetter());
+        List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(allActiveListings);
+        addListingImages(listingPreviewDtos);
+        addRatings(listingPreviewDtos);
+        return listingPreviewDtos;
+    }
+
     public List<ListingPreviewDto> findAllActiveListingsPreviewSortByRating() {
         List<Listing> allActiveListings = listingService.findAllActiveListings(Status.ACTIVE.getLetter());
         List<ListingPreviewDto> listingPreviewDtos = listingMapper.toListingPreviewDtos(allActiveListings);
@@ -139,6 +148,46 @@ public class ListingsService {
         List<ListingFeature> listingFeatures = createListingFeatures(addFullListingDto.getFeatures(), listing);
         listingFeatureService.addAll(listingFeatures);
     }
+
+    @Transactional
+    public void editFullListing(AddFullListingDto editFullListingDto) {
+        Listing listing = listingMapper.toListing(editFullListingDto);
+
+        // Delete existing features and images
+        listingFeatureService.deleteAllBy(listing);
+        imageService.deleteAllBy(listing);
+
+        // Find and set user to listing
+        User user = userService.findUserBy(editFullListingDto.getOwnerUserId());
+        listing.setOwnerUser(user);
+
+        // Find, save and set location to listing
+        Location location = locationMapper.toLocation(editFullListingDto);
+        County county = countyService.getCountyBy(editFullListingDto.getLocationCountyId());
+        location.setCounty(county);
+        locationService.saveLocation(location);
+        listing.setLocation(location);
+
+        // save/write over the existing listing in the database
+        listingService.addListing(listing);
+
+
+        // Delete the old location
+        locationService.deleteById(editFullListingDto.getLocationId());
+
+
+
+        // Create listing feature object, put relevant data into it and save it to the db
+        List<ListingFeature> listingFeatures = createListingFeatures(editFullListingDto.getFeatures(), listing);
+        listingFeatureService.addAll(listingFeatures);
+
+        // Create image object, put images into it and save it to the db
+        List<Image> images = createImages(editFullListingDto.getImagesData(), listing);
+        imageService.addAll(images);
+
+
+    }
+
 
     public void deactivateListing(Integer listingId) {
         Listing listing = listingService.getListingBy(listingId);

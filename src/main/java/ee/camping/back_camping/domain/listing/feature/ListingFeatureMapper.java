@@ -14,4 +14,9 @@ public interface ListingFeatureMapper {
     @Mapping(source = "isSelected", target = "featureIsSelected")
     FeatureDto toFeatureDto(ListingFeature listingFeature);
     List<FeatureDto> toFeatureDtos(List<ListingFeature> listingFeatures);
+
+
+    @Mapping(source = "featureId", target = "id")
+    @Mapping(source = "featureIsSelected", target = "isSelected")
+    ListingFeature toListingFeature(FeatureDto featureDto);
 }

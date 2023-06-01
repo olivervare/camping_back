@@ -10,9 +10,6 @@ public class CountyService {
     @Resource
     private CountyRepository countyRepository;
 
-    public County findCountyBy(Integer countyId) {
-        return countyRepository.findCountyBy(countyId);
-    }
 
     public List<County> getCounties() {
         return countyRepository.findAll();

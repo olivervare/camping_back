@@ -1,5 +1,6 @@
 package ee.camping.back_camping.domain.listing.feature;
 
+import ee.camping.back_camping.domain.listing.Listing;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -28,4 +29,9 @@ public class ListingFeatureService {
     public ListingFeature getFeatureBy(Integer featureId, Boolean featureIsSelected) {
         return listingFeatureRepository.getFeatureBy(featureId, featureIsSelected);
     }
+
+    public void deleteAllBy(Listing listing) {
+        listingFeatureRepository.deleteAllBy(listing);
+    }
 }
+

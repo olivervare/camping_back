@@ -27,12 +27,6 @@ public class UsersController {
         return usersService.addUser(newUserDto);
     }
 
-    @PostMapping("/signup-info")
-    @Operation(summary = "Loob username'i ja passwordi juurde kontaktandmed")
-    public void addContact(@RequestBody ContactDto contactDto) {
-        usersService.addContact(contactDto);
-    }
-
     @DeleteMapping("/signup-info")
     @Operation(summary = "Poolelioleva kasutaja kustutamine", description = "Kasutaja kustutamine userId kaudu")
     public void deleteUser(@RequestParam Integer userId) {

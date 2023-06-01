@@ -30,6 +30,7 @@ public class UsersService {
     @Resource
     private ContactMapper contactMapper;
 
+    @Transactional
     public LoginResponseDto addUser(NewUserDto newUserDto) {
         userService.validateIfUsernameIsAvailable(newUserDto.getUsername());   //valideerib kasutajakoha
         User user = userMapper.toUser(newUserDto);                             //mäpib dto-s user-tabeli väljad (FK-d ei saa mäppida)
@@ -37,16 +38,12 @@ public class UsersService {
         user.setRole(role);                                                     //paneb selle user-tabelisse
 
         userService.addUser(user);                              //lisab kasutaja user tabelisse.
-        return userMapper.toLoginResponseDto(user);             //tagastab loginmäpperiga lisatud useri userId ja roleName'i
+        Contact contact = createBlankContact(user);
+        contactService.addContact(contact);
+
+        return userMapper.toLoginResponseDto(user, false);             //tagastab loginmäpperiga lisatud useri userId ja roleName'i
     }
 
-    @Transactional
-    public void addContact(ContactDto contactDto) {
-        Contact contact = contactMapper.toContact(contactDto);
-        User user = userService.findUserBy(contactDto.getUserId());
-        contact.setUser(user);
-        contactService.addContact(contact);
-    }
 
     public void deleteUser(Integer userId) {
         userService.deleteUserBy(userId);
@@ -63,5 +60,14 @@ public class UsersService {
         User user = userService.findUserBy(contactDto.getUserId());
         contact.setUser(user);
         contactService.addContact(contact);
+    }
+
+    private static Contact createBlankContact(User user) {
+        Contact contact = new Contact();
+        contact.setUser(user);
+        contact.setFirstName("");
+        contact.setLastName("");
+        contact.setEmail("");
+        return contact;
     }
 }

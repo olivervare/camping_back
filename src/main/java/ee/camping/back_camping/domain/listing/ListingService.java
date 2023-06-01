@@ -25,6 +25,10 @@ public class ListingService {
         return listingRepository.findAndSortByListingIdAllListings(status);
     }
 
+    public List<Listing> findAllActiveListingsSortedByPrice(String status) {
+        return listingRepository.findAllByStatusOrderByPriceAsc(status);
+    }
+
     public void validateIfListingNameIsAvailable(String listingName) {
         boolean listingExists = listingRepository.listingExistsBy(listingName);
         ValidationService.validateListingNameAvailability(listingExists);
@@ -45,5 +49,4 @@ public class ListingService {
     public void deleteListing(Integer listingId) {
         listingRepository.deleteById(listingId);
     }
-
 }

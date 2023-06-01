@@ -34,11 +34,10 @@ public class ListingsController {
     }
 
     @PutMapping("/add-listing")
-    @Operation(summary = "Täiendab/uuendab telkimisplatsi täisinfo")
+    @Operation(summary = "Pooleli oleva listingule täisinfo lisamine")
     public void addFullListing(@RequestBody AddFullListingDto addFullListingDto) {
         listingsService.addFullListing(addFullListingDto);
     }
-
 
     @DeleteMapping("/add-listing")
     @Operation(summary = "Pooleli oleva listingu kustutamine", description = "Anname kaasa listingId ja kustutame listingu")
@@ -51,6 +50,24 @@ public class ListingsController {
             description = "Kuvab listingu pildi, nime (listing name), ja reitingu (average score)")
     public List<ListingPreviewDto> findAllActiveListingsPreview() {
         return listingsService.findAllActiveListingsPreview();
+    }
+
+    @GetMapping("/listing")
+    @Operation(summary = "Tagastab kogu info ühe konkreetse listingu kohta", description = "Anname listingId ja tagastame antud listing kõik andmed")
+    public ListingFullDto getListing(@RequestParam Integer listingId) {
+        return listingsService.getListing(listingId);
+    }
+
+    @DeleteMapping("/my-listings")
+    @Operation(summary = "Telkimisplatsi kustutamine(deaktiveerimine)", description = "Anname listingId ja märgime staatuse deaktiivseks.")
+    public void deactivateListing(@RequestParam Integer listingId) {
+        listingsService.deactivateListing(listingId);
+    }
+
+    @PutMapping("/edit-listing")
+    @Operation(summary = "Uuendab telkimisplatsi täisinfo, samal ajal kustutab eelmised pildid, listingfeature'd ja locationid ära.")
+    public void editFullListing(@RequestBody AddFullListingDto editFullListingDto) {
+        listingsService.editFullListing(editFullListingDto);
     }
 
     @GetMapping("/listings-by-listing-id")
@@ -69,16 +86,10 @@ public class ListingsController {
         return listingsService.findAllActiveListingsPreviewSortByRating();
     }
 
-    @GetMapping("/listing")
-    @Operation(summary = "Tagastab kogu info ühe konkreetse listingu kohta", description = "Anname listingId ja tagastame antud listing kõik andmed")
-    public ListingFullDto getListing(@RequestParam Integer listingId) {
-        return listingsService.getListing(listingId);
-    }
-
-    @DeleteMapping("/my-listings")
-    @Operation(summary = "Telkimisplatsi kustutamine(deaktiveerimine)", description = "Anname listingId ja märgime staatuse deaktiivseks.")
-    public void deactivateListing(@RequestParam Integer listingId) {
-        listingsService.deactivateListing(listingId);
+    @GetMapping("/listings-sortby-price-asc")
+    @Operation(summary = "Tagastab kõikide telkimisplatside preview andmed (nime, pildi, hinna, keskmise skoori ja skooride arvu) sorteeritult hinna alusel madalamast kõrgemaks")
+    public List<ListingPreviewDto> findAllActiveListingsPreviewSortByPrice() {
+        return listingsService.findAllActiveListingsPreviewSortByPrice();
     }
 
     @GetMapping("/listings-filter")
