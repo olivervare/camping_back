@@ -34,6 +34,7 @@ insert into public.contact (id, user_id, first_name, last_name, email, phone_no,
 -- Location table
 insert into public.location (id, county_id, address, longitude, latitude) values (default, 1, 'Matkaplatsi 4, Aegviidu', 59.286220, 25.612050);
 insert into public.location (id, county_id, address, longitude, latitude) values (default, 2, 'Kuusejuurikas 2', 59.286220, 26.612050);
+insert into public.location (id, county_id, address, longitude, latitude) values (default, 3, 'Metsatee ääres', 59.006614, 24.825560);
 
 -- Listing table
 insert into public.listing (id, owner_user_id, location_id, name, description, additional_info, price, status) values (default,
@@ -41,6 +42,8 @@ insert into public.listing (id, owner_user_id, location_id, name, description, a
                                      'Kõik on lageda taeva all! Oled heldesti oodatud.', 'Telkida saab', 23, 'A');
 insert into public.listing (id, owner_user_id, location_id, name, description, additional_info, price, status) values (default,
     2, 2, 'Keila spa', 'Hästi hea', 'Lisainfoks nii palju et..', 10, 'A');
+insert into public.listing (id, owner_user_id, location_id, name, description, additional_info, price, status) values (default,
+    3, 3, 'Rapla kämpingplats', 'Muru on roheline ja taevas sinine - siin on nii ilus.', 'Koerad lubatud', 12, 'A');
 
 -- Feature table
 insert into public.feature (id, name) values (default, 'Lõkkeplats/grillplats');
@@ -59,10 +62,26 @@ insert into public.listing_feature(id, listing_id, feature_id, is_selected) valu
 insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 1, 5, true);
 insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 1, 6, true);
 insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 1, 7, true);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 2, 1, true);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 2, 2, true);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 2, 3, false);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 2, 4, false);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 2, 5, false);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 2, 6, false);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 2, 7, false);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 3, 1, true);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 3, 2, false);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 3, 3, true);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 3, 4, false);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 3, 5, false);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 3, 6, true);
+insert into public.listing_feature(id, listing_id, feature_id, is_selected) values (default, 3, 7, true);
+
 
 -- Image table
 insert into public.image(id, listing_id, data) values (default, 1, '0x00800');
 insert into public.image(id, listing_id, data) values (default, 2, '0x00800');
+insert into public.image(id, listing_id, data) values (default, 3, '0x00800');
 
 -- Review table
 insert into public.review(id, listing_id, user_id, score, comment) values (default, 1, 1, 5, 'Väga hea host ja kohvi pakuti ka.');
@@ -71,3 +90,5 @@ insert into public.review(id, listing_id, user_id, score, comment) values (defau
 insert into public.review(id, listing_id, user_id, score, comment) values (default, 2, 1, 5, 'Väga hea host ja kohvi pakuti ka.');
 insert into public.review(id, listing_id, user_id, score, comment) values (default, 2, 3, 3, 'OK koht');
 insert into public.review(id, listing_id, user_id, score, comment) values (default, 2, 4, 2, null);
+insert into public.review(id, listing_id, user_id, score, comment) values (default, 3, 4, 4, 'vähe vett oli, aga muidu ilus');
+insert into public.review(id, listing_id, user_id, score, comment) values (default, 3, 2, 3, null);
