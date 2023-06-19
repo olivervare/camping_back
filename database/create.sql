@@ -8,6 +8,7 @@ CREATE TABLE booking (
     customer_user_id int  NOT NULL,
     listing_id int  NOT NULL,
     people_count int  NOT NULL,
+    tent_amount int NULL,
     check_in date  NOT NULL,
     check_out date  NOT NULL,
     status char(1)  NOT NULL,

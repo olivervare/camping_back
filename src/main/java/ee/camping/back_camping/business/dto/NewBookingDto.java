@@ -1,7 +1,6 @@
-package ee.camping.back_camping.domain.booking;
+package ee.camping.back_camping.business.dto;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import ee.camping.back_camping.domain.booking.Booking;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingDto implements Serializable {
+public class NewBookingDto implements Serializable {
     private Integer id;
     private Integer customerUserId;
     private Integer listingId;

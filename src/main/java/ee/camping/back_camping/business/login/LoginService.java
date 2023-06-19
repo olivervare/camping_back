@@ -31,8 +31,6 @@ public class LoginService {
             profileIsCompleted = false;
         }
 
-
-
         return userMapper.toLoginResponseDto(user, profileIsCompleted);
 
     }
