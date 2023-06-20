@@ -20,7 +20,7 @@ public class UserService {
     }
 
     public void validateIfUsernameIsAvailable(String username) {
-        boolean userExists = userRepository.userExistsBy(username);
+        boolean userExists = userRepository.doesUserExistBy(username);
         ValidationService.validateUsernameAvailability(userExists);
     }
 
