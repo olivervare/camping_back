@@ -7,7 +7,8 @@ public enum Status {
     ACTIVE("A"),
     DELETED("D"),
     PENDING("P"),
-    CONFIRMED("C");
+    CONFIRMED("C"),
+    REJECTED("R");
 
     private final String letter;
 

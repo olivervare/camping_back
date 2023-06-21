@@ -47,4 +47,9 @@ public class BookingsService {
     public void deleteBooking(Integer bookingId) {
         bookingService.deleteBookingBy(bookingId);
     }
+
+    public void confirmBooking(String bookingStatus, Integer bookingId) {
+        bookingService.updateBookingStatus(bookingStatus, bookingId);
+
+    }
 }

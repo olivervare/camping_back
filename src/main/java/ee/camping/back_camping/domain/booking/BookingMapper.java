@@ -13,6 +13,7 @@ import java.util.List;
 public interface BookingMapper {
 
     @Mapping(source = "id", target = "bookingId")
+    @Mapping(source = "status", target = "bookingStatus")
     @Mapping(source = "listing.id", target = "listingId")
     @Mapping(source = "customerUser.id", target = "customerUserId")
     BookingDto toBookingDto(Booking booking);

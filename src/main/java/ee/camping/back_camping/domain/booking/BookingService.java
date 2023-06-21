@@ -22,4 +22,8 @@ public class BookingService {
     public List<Booking> findBookingsBy(Integer customerUserId) {
         return bookingRepository.findBookingsBy(customerUserId);
     }
+
+    public void updateBookingStatus(String status, Integer bookingId) {
+        bookingRepository.updateStatus(status, bookingId);
+    }
 }
