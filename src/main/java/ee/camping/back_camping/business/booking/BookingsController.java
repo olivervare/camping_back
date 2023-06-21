@@ -1,7 +1,7 @@
 package ee.camping.back_camping.business.booking;
 
+import ee.camping.back_camping.business.dto.AddBookingResponse;
 import ee.camping.back_camping.business.dto.BookingDto;
-import ee.camping.back_camping.business.dto.BookingResponse;
 import ee.camping.back_camping.business.dto.NewBookingDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Resource;
@@ -25,7 +25,7 @@ public class BookingsController {
     @Operation(summary = "Loob booking-tabelisse uue broneeringu",
             description = "Valideerib userId ja listingId ning selle, et küsialused kuupäevad on vabad," +
                     " tagastab bookindId ja broneeringustaatuse")
-    public BookingResponse addBooking(@RequestBody NewBookingDto newBookingDto) {
+    public AddBookingResponse addBooking(@RequestBody NewBookingDto newBookingDto) {
         return bookingsService.addNewBooking(newBookingDto);
     }
 

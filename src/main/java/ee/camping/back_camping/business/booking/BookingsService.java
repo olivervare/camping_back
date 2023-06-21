@@ -1,7 +1,7 @@
 package ee.camping.back_camping.business.booking;
 
+import ee.camping.back_camping.business.dto.AddBookingResponse;
 import ee.camping.back_camping.business.dto.BookingDto;
-import ee.camping.back_camping.business.dto.BookingResponse;
 import ee.camping.back_camping.business.dto.NewBookingDto;
 import ee.camping.back_camping.domain.booking.Booking;
 import ee.camping.back_camping.domain.booking.BookingMapper;
@@ -33,8 +33,7 @@ public class BookingsService {
         return bookingMapper.toBookingDtos(bookings);
     }
     @Transactional
-    public BookingResponse addNewBooking(NewBookingDto newBookingDto) {
-        // todo: valideeri kuupäevade võimalikkus.
+    public AddBookingResponse addNewBooking(NewBookingDto newBookingDto) {
         Booking booking = bookingMapper.toBooking(newBookingDto);
         Listing listingId = listingService.getListingBy(newBookingDto.getListingId());
         User customerUserId = userService.findUserBy(newBookingDto.getCustomerUserId());
@@ -42,14 +41,12 @@ public class BookingsService {
         booking.setCustomerUser(customerUserId);
         bookingService.addBooking(booking);
 
-        return bookingMapper.toBookingResponse(booking);
+        return bookingMapper.toAddBookingResponse(booking);
     }
     public void deleteBooking(Integer bookingId) {
         bookingService.deleteBookingBy(bookingId);
     }
-
     public void confirmBooking(String bookingStatus, Integer bookingId) {
         bookingService.updateBookingStatus(bookingStatus, bookingId);
-
     }
 }

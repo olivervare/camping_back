@@ -1,12 +1,11 @@
 package ee.camping.back_camping.domain.booking;
 
 import ee.camping.back_camping.business.Status;
+import ee.camping.back_camping.business.dto.AddBookingResponse;
 import ee.camping.back_camping.business.dto.BookingDto;
-import ee.camping.back_camping.business.dto.BookingResponse;
 import ee.camping.back_camping.business.dto.NewBookingDto;
 import org.mapstruct.*;
 
-import java.awt.print.Book;
 import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, imports = {Status.class})
@@ -24,5 +23,6 @@ public interface BookingMapper {
     Booking toBooking(NewBookingDto newBookingDto);
 
     @Mapping(source = "id", target = "bookingId")
-    BookingResponse toBookingResponse(Booking booking);
+    AddBookingResponse toAddBookingResponse(Booking booking);
+
 }

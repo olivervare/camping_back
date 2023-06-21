@@ -14,6 +14,6 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingResponse implements Serializable {
+public class AddBookingResponse implements Serializable {
     private Integer bookingId;
 }
