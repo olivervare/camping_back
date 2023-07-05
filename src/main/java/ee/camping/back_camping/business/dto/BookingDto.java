@@ -18,9 +18,13 @@ import java.time.LocalDate;
 public class BookingDto implements Serializable {
     private Integer bookingId;
     private Integer customerUserId;
+    private String customerUserName;
     private Integer listingId;
+    private Integer ownerUserId;
+    private String listingName;
+    private Integer listingPrice;
     private Integer peopleCount;
-    private LocalDate checkIn;
-    private LocalDate checkOut;
+    private LocalDate checkInDate;
+    private LocalDate checkOutDate;
     private String bookingStatus;
 }

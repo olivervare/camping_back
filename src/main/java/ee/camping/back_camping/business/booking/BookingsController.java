@@ -15,13 +15,13 @@ public class BookingsController {
     @Resource
     private BookingsService bookingsService;
 
-    @GetMapping("/book-listing")
+    @GetMapping("/book/listing")
     @Operation(summary = "Tagastab customerUserId järgi booking-tabelist kõik kasutaja broneeringud")
     public List<BookingDto> findBookings(@RequestParam Integer customerUserId) {
         return bookingsService.findBookingsBy(customerUserId);
     }
 
-    @PostMapping("/book-listing")
+    @PostMapping("/book/listing")
     @Operation(summary = "Loob booking-tabelisse uue broneeringu",
             description = "Valideerib userId ja listingId ning selle, et küsialused kuupäevad on vabad," +
                     " tagastab bookindId ja broneeringustaatuse")
@@ -29,13 +29,13 @@ public class BookingsController {
         return bookingsService.addNewBooking(newBookingDto);
     }
 
-    @DeleteMapping("/book-listing")
+    @DeleteMapping("/book/listing")
     @Operation(summary = "Kustutab bookingId järgi booking-tabelist broneeringu")
     public void deleteBooking(@RequestParam Integer bookingId) {
         bookingsService.deleteBooking(bookingId);
     }
 
-    @PatchMapping("/booking-confirmation")
+    @PatchMapping("/booking/confirmation")
     @Operation(summary = "Muudab bookingId järgi booking-tabelis broneeringu staatuse",
             description = "C - confirmed, R - rejected")
     public void confirmBooking(@RequestParam String bookingStatus, Integer bookingId) {
